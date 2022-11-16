@@ -1,31 +1,4 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@lgeorges1234 
-lgeorges1234
-/
-4_Full_Stack_Web_Store_Project
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-4_Full_Stack_Web_Store_Project/4_MyStore_Backend/.eslintrc.json
 
-Your Name Init
-Latest commit 2d371c1 on 27 Mar
- History
- 1 contributor
-49 lines (49 sloc)  1.22 KB
 
 {
     "env": {
