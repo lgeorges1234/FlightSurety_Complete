@@ -26,7 +26,6 @@ const create = async (req: Request, res: Response) => {
   const airline: Airline = {
     name: req.body.name,
     country_id: req.body.countryId,
-    user_id: req.body.userId,
   };
   try {
     const result = await store.create(airline);
@@ -47,10 +46,10 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const airlinesRoutes = (app: express.Application) => {
-  app.get('/airlines', verifyAuthToken, callerIsOwnerAdminOrAdmin, index);
-  app.get('/airlines/:id', verifyAuthToken, callerIsOwnerOrOwnerAdminOrAdmin, show);
-  app.post('/airlines', callerIsOwnerAdminOrAdmin, create);
-  app.delete('/airlines/:id', verifyAuthToken, callerIsOwnerAdminOrAdmin, destroy);
+  app.get('/airlines', verifyAuthToken, index);
+  app.get('/airlines/:id', verifyAuthToken, show);
+  app.post('/airlines', create);
+  app.delete('/airlines/:id', verifyAuthToken, destroy);
 };
 
 export default airlinesRoutes;

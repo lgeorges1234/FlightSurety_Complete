@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import jwt, { Secret } from 'jsonwebtoken';
 import {
   callerIsAdmin,
   callerIsRootorAdmin,
@@ -14,6 +13,7 @@ import { authenticateInputValidator, userInputValidator } from '../middlewares/u
 import { getRolesIdFromRolesName, getStatusIdFromStatusName } from '../helpers/userUtilityFunction';
 
 import { User, UserStore } from '../models/users';
+import { createCsrfToken, createSessionToken } from '../helpers/security.utils';
 
 const store = new UserStore();
 
@@ -58,11 +58,12 @@ const create = async (req: Request, res: Response) => {
   try {
     const newUser = await store.create(user);
     // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-    const token = jwt.sign(
-      { user: newUser },
-      process.env.TOKEN_SECRET as Secret,
-      { expiresIn: '3600' }
-    );
+    // const token = jwt.sign(
+    //   { user: newUser },
+    //   process.env.TOKEN_SECRET as Secret,
+    //   { expiresIn: '3600' }
+    // );
+    const token = createSessionToken(newUser);
     // console.log(`usersStores -- create -- token : ${token}`)
     res.json(token);
   } catch (error: any) {
@@ -99,10 +100,11 @@ const authenticate = async (req: Request, res: Response) => {
   try {
     // console.log(`userStores -- authenticate -- user ${JSON.stringify(user)}`)
     const authenticateUser = await store.authenticate(user);
-    const token = jwt.sign(
-      { user: authenticateUser },
-      process.env.TOKEN_SECRET as Secret
-    );
+    // const token = jwt.sign(
+    //   { user: authenticateUser },
+    //   process.env.TOKEN_SECRET as Secret
+    // );
+    const token = await createSessionToken(authenticateUser);
     res.json(token);
   } catch (error: any) {
     res.status(412).send({
@@ -156,11 +158,12 @@ const createAdmin = async (req: Request, res: Response) => {
   try {
     const newUser = await store.create(user);
     // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-    const token = jwt.sign(
-      { user: newUser },
-      process.env.TOKEN_SECRET as Secret,
-      { expiresIn: '3600' }
-    );
+    // const token = jwt.sign(
+    //   { user: newUser },
+    //   process.env.TOKEN_SECRET as Secret,
+    //   { expiresIn: '3600' }
+    // );
+    const token = await createSessionToken(newUser);
     // console.log(`usersStores -- create -- token : ${token}`)
     res.json(token);
   } catch (error: any) {

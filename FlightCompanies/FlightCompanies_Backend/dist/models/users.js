@@ -12,7 +12,8 @@ const pepper = process.env.BCRYPT_PASSWORD;
 class UserStore {
     async index() {
         try {
-            const sql = 'SELECT email, users.id, firstname, lastname, status.status_name as status, roles.roles_name as roles, password_digest FROM users' +
+            const sql = 'SELECT email, users.id, firstname, lastname, status.status_name as status, roles.roles_name as roles, password_digest' +
+                ' FROM users' +
                 ' INNER JOIN status ON users.status = status.id' +
                 ' INNER JOIN roles ON users.roles = roles.id' +
                 ' ORDER BY users.id';

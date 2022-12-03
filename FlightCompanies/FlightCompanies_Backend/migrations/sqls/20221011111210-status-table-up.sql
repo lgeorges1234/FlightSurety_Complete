@@ -6,4 +6,6 @@ CREATE TABLE status (
 INSERT INTO status("id", "status_name") VALUES (E'1', E'root');
 INSERT INTO status("id", "status_name") VALUES (E'2', E'admin');
 INSERT INTO status("id", "status_name") VALUES (E'3', E'disactiv');
-INSERT INTO status("id", "status_name") VALUES (E'4', E'activ');
+INSERT INTO status("id", "status_name") VALUES (E'4', E'airlineAdmin');
+INSERT INTO status("id", "status_name") VALUES (E'5', E'airline');
+INSERT INTO status("id", "status_name") VALUES (E'6', E'client');

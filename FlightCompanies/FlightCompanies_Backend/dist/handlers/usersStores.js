@@ -1,13 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const userVerifier_1 = require("../middlewares/userVerifier");
+const userMiddlewares_1 = require("../middlewares/userMiddlewares");
 const userInputsValidator_1 = require("../middlewares/userInputsValidator");
 const userUtilityFunction_1 = require("../helpers/userUtilityFunction");
 const users_1 = require("../models/users");
+const security_utils_1 = require("../helpers/security.utils");
 const store = new users_1.UserStore();
 const index = async (_req, res) => {
     try {
@@ -49,7 +46,12 @@ const create = async (req, res) => {
     try {
         const newUser = await store.create(user);
         // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-        const token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET, { expiresIn: '3600' });
+        // const token = jwt.sign(
+        //   { user: newUser },
+        //   process.env.TOKEN_SECRET as Secret,
+        //   { expiresIn: '3600' }
+        // );
+        const token = (0, security_utils_1.createSessionToken)(newUser);
         // console.log(`usersStores -- create -- token : ${token}`)
         res.json(token);
     }
@@ -86,7 +88,11 @@ const authenticate = async (req, res) => {
     try {
         // console.log(`userStores -- authenticate -- user ${JSON.stringify(user)}`)
         const authenticateUser = await store.authenticate(user);
-        const token = jsonwebtoken_1.default.sign({ user: authenticateUser }, process.env.TOKEN_SECRET);
+        // const token = jwt.sign(
+        //   { user: authenticateUser },
+        //   process.env.TOKEN_SECRET as Secret
+        // );
+        const token = await (0, security_utils_1.createSessionToken)(authenticateUser);
         res.json(token);
     }
     catch (error) {
@@ -140,7 +146,12 @@ const createAdmin = async (req, res) => {
     try {
         const newUser = await store.create(user);
         // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-        const token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET, { expiresIn: '3600' });
+        // const token = jwt.sign(
+        //   { user: newUser },
+        //   process.env.TOKEN_SECRET as Secret,
+        //   { expiresIn: '3600' }
+        // );
+        const token = await (0, security_utils_1.createSessionToken)(newUser);
         // console.log(`usersStores -- create -- token : ${token}`)
         res.json(token);
     }
@@ -154,16 +165,16 @@ const createAdmin = async (req, res) => {
 };
 const usersRoutes = (app) => {
     // user path
-    app.get('/users/:id', userVerifier_1.existingUserId, userVerifier_1.verifyAuthToken, userVerifier_1.callerIsOwnerOrAdmin, show);
-    app.post('/users/register', userInputsValidator_1.userInputValidator, userVerifier_1.uniqueEmail, create);
-    app.delete('/users/:id', userVerifier_1.verifyAuthToken, userVerifier_1.callerIsOwnerOrAdmin, userVerifier_1.existingUserId, destroy);
-    app.post('/users/authenticate', userInputsValidator_1.authenticateInputValidator, userVerifier_1.existingEmail, authenticate);
+    app.get('/users/:id', userMiddlewares_1.existingUserId, userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsUserOrAdmin, show);
+    app.post('/users/register', userInputsValidator_1.userInputValidator, userMiddlewares_1.uniqueEmail, create);
+    app.delete('/users/:id', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsUserOrAdmin, userMiddlewares_1.existingUserId, destroy);
+    app.post('/users/authenticate', userInputsValidator_1.authenticateInputValidator, userMiddlewares_1.existingEmail, authenticate);
     // admin path
     // the first (and only the first administrator account) will be created thanks to the initial root account
-    app.post('/users', userVerifier_1.verifyAuthToken, userVerifier_1.callerIsRootorAdmin, userVerifier_1.callerIsRoot, userVerifier_1.uniqueEmail, userInputsValidator_1.userInputValidator, createAdmin);
-    app.get('/users', userVerifier_1.verifyAuthToken, userVerifier_1.callerIsAdmin, index); // retun all users
-    app.get('/status', userVerifier_1.verifyAuthToken, userVerifier_1.callerIsAdmin, indexStatus); // return all status
-    app.get('/roles', userVerifier_1.verifyAuthToken, userVerifier_1.callerIsAdmin, indexRoles); // return all roles
+    app.post('/users', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsRootorAdmin, userMiddlewares_1.callerIsRoot, userMiddlewares_1.uniqueEmail, userInputsValidator_1.userInputValidator, createAdmin);
+    app.get('/users', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, index); // retun all users
+    app.get('/status', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, indexStatus); // return all status
+    app.get('/roles', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, indexRoles); // return all roles
 };
 /// middleware
 // verifyAuthToken    Check if the user's token is valid

@@ -1,0 +1,61 @@
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+      <mat-nav-list (click)="sidenav.close">
+        <a mat-list-item>
+          <mat-icon>flight_land</mat-icon>
+          <span>FlightAirline</span>
+        </a>
+        <a mat-list-item routerLink="/">
+          <mat-icon>flight_land</mat-icon>
+          <span>FlightAirline</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-toolbar class="" class="mat-elevation-z8" mat-elevation-z8>
+      <div class="container main-nav">
+        <button mat-icon-button (click)="sidenav.open()"> 
+          <mat-icon>menue</mat-icon>
+        </button>
+        <h1 class="main-nav-title">
+          <span>FlightAirlines</span>
+          <mat-icon class="main-nav-logo">flight_land</mat-icon>
+        </h1>
+    
+        <div class="main-nav-account">
+          <a mat-button *ngIf="isLoggedOut$ | async" (click)="signin()">
+            <mat-icon>account_circle</mat-icon>
+            Login
+          </a>
+          <a mat-button *ngIf="isLoggedOut$ | async" (click)="signup()">
+            <mat-icon>person_add</mat-icon>
+            Sign Up
+          </a>
+          <a mat-button *ngIf="isLoggedIn$ | async" (click)="logout()">
+            <mat-icon>no_accounts</mat-icon>
+            Logout
+          </a>
+        </div>
+      </div>
+    </mat-toolbar>
+  
+    <mat-toolbar class="mat-elevation-z8 secondary-nav" mat-elevation-z8 *ngIf="isClient$ | async">
+      <div class="container">
+        <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
+          Book a FLight
+        </a>
+        <a class="secondary-nav-button" mat-button>
+          Check-in
+        </a>
+        <a class="secondary-nav-button" mat-button>
+          My Bookings
+        </a>
+        <a class="secondary-nav-button" mat-button>
+          Flight Insurance
+        </a>
+      </div>
+    </mat-toolbar>
+  
+    <mat-toolbar class="mat-elevation-z8" mat-elevation-z8 *ngIf="isAirline$ | async">
+  
+    </mat-toolbar>
+  </mat-sidenav-container>
