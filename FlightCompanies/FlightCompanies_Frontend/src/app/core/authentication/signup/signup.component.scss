@@ -1,0 +1,48 @@
+.signup {
+    position : absolute;
+    margin-top: 30px;
+    margin-left: 80px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 30px 30px 40px;
+}
+
+.signup-close-button {
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+::ng-deep .mat-card-header .mat-card-header-text {
+    margin: 0;
+}
+
+.signup-header {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    margin: 0;
+}
+
+.signup-header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: midnightblue;
+}
+
+.signup-header-subtitle {
+    font-size: 1rem;
+}
+
+
+.signup-content {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    gap: 10px;
+}
+
+
+.signup-button {
+    align-self: flex-end;
+}

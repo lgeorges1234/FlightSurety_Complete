@@ -1,7 +1,10 @@
-
-
-export interface User {
+export interface UserAuth {
     id:number;
-    email:string;
     roles: string;
+}
+
+export interface UserInfo {
+    firstname:string;
+    lastname:string;
+    email:string;
 }

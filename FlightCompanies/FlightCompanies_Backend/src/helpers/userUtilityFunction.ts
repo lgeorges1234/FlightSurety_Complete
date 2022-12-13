@@ -46,18 +46,3 @@ export const getStatusIdFromStatusName = async(userStatusName: string) => {
     return error;
   }
 }
-
-export const getRolesIdFromRolesName = async(userRoles: string) => {
-  try {
-    // console.log(`userFonctions -- getRolesIdFromRolesName -- userRoles : ${JSON.stringify(userRoles)}`)
-    const rolesAvailable: any = await store.indexRoles();
-    for (let roles of rolesAvailable) {
-      if (userRoles.toLowerCase() == roles.roles_name) {
-        // console.log(`userFonctions -- getRolesIdFromRolesName -- status : ${JSON.stringify(roles)}`)
-        return roles.id;}
-    }
-    throw new Error("Status is not valid")
-  } catch (error: any) {
-    return error;
-  }
-}

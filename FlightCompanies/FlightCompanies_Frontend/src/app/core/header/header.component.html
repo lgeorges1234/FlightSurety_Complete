@@ -1,61 +1,83 @@
-<mat-sidenav-container>
-    <mat-sidenav #sidenav>
-      <mat-nav-list (click)="sidenav.close">
-        <a mat-list-item>
-          <mat-icon>flight_land</mat-icon>
-          <span>FlightAirline</span>
+  <mat-sidenav #sidenav>
+    <mat-nav-list (click)="sidenav.close()">
+      <a mat-list-item>
+        <mat-icon>flight_land</mat-icon>
+        <span>FlightAirline</span>
+      </a>
+      <a mat-list-item routerLink="/">
+        <mat-icon>flight_land</mat-icon>
+        <span>FlightAirline</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar>
+    <div class="container main-nav">
+      <button mat-icon-button (click)="sidenav.open()"> 
+        <mat-icon>menue</mat-icon>
+      </button>
+      <h1 class="main-nav-title">
+        <span>FlightAirlines</span>
+        <mat-icon class="main-nav-logo">flight_land</mat-icon>
+      </h1>
+  
+      <div class="main-nav-account">
+        <a mat-button [mat-menu-trigger-for]="myAccount" *ngIf="isLoggedIn$ | async">
+          Title
+          {{ (user$ | async)!.id }}
         </a>
-        <a mat-list-item routerLink="/">
-          <mat-icon>flight_land</mat-icon>
-          <span>FlightAirline</span>
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-toolbar class="" class="mat-elevation-z8" mat-elevation-z8>
-      <div class="container main-nav">
-        <button mat-icon-button (click)="sidenav.open()"> 
-          <mat-icon>menue</mat-icon>
-        </button>
-        <h1 class="main-nav-title">
-          <span>FlightAirlines</span>
-          <mat-icon class="main-nav-logo">flight_land</mat-icon>
-        </h1>
-    
-        <div class="main-nav-account">
-          <a mat-button *ngIf="isLoggedOut$ | async" (click)="signin()">
-            <mat-icon>account_circle</mat-icon>
-            Login
+
+        <mat-menu #myAccount class="main-nav-isLoggedIn">
+          <a mat-button routerLink="/myAccount" (click)="getUserInfo()">
+            <mat-icon>person</mat-icon>
+            My Account
           </a>
-          <a mat-button *ngIf="isLoggedOut$ | async" (click)="signup()">
-            <mat-icon>person_add</mat-icon>
-            Sign Up
-          </a>
-          <a mat-button *ngIf="isLoggedIn$ | async" (click)="logout()">
-            <mat-icon>no_accounts</mat-icon>
+          <a mat-button  (click)="logout()">
+            <mat-icon>person_off</mat-icon>
             Logout
           </a>
-        </div>
-      </div>
-    </mat-toolbar>
-  
-    <mat-toolbar class="mat-elevation-z8 secondary-nav" mat-elevation-z8 *ngIf="isClient$ | async">
-      <div class="container">
-        <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
-          Book a FLight
+        </mat-menu>
+
+        <a mat-button *ngIf="isLoggedOut$ | async" (click)="login()">
+          <mat-icon>account_circle</mat-icon>
+          Login
         </a>
-        <a class="secondary-nav-button" mat-button>
-          Check-in
-        </a>
-        <a class="secondary-nav-button" mat-button>
-          My Bookings
-        </a>
-        <a class="secondary-nav-button" mat-button>
-          Flight Insurance
+        <a mat-button routerLink="/auth/signup/" *ngIf="isLoggedOut$ | async">
+          <mat-icon>person_add</mat-icon>
+          Sign Up
         </a>
       </div>
-    </mat-toolbar>
-  
-    <mat-toolbar class="mat-elevation-z8" mat-elevation-z8 *ngIf="isAirline$ | async">
-  
-    </mat-toolbar>
-  </mat-sidenav-container>
+    </div>
+  </mat-toolbar>
+
+  <mat-toolbar class="mat-elevation-z8 secondary-nav" mat-elevation-z8 [ngClass]="(currentRoute$ | async) !='/auth/signup' ? '' : 'blue-nav'">
+    <div class="container nav-flex-container" *ngIf="(currentRoute$ | async) !='/auth/signup'">
+      <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
+        Book a FLight
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Check-in
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        My Bookings
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Flight Insurance
+      </a>
+    </div>
+    <div class="container nav-flex-container" *ngIf="(isAirline$ | async) && (currentRoute$ | async) !='/auth/signup'">
+      <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
+        Book a FLight
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Check-in
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        My Bookings
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Flight Insurance
+      </a>
+    </div>
+  </mat-toolbar>
+
+

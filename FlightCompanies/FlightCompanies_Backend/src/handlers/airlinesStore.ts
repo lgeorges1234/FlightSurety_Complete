@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { verifyAuthToken } from '../middlewares/userMiddlewares';
+import { verifyAuthToken } from '../middlewares/user.Middlewares';
 import { Airline, AirlineStore } from '../models/airlines';
 
 const store = new AirlineStore();

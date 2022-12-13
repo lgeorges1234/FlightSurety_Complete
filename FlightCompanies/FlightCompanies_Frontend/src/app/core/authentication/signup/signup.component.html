@@ -1,0 +1,38 @@
+<div class="container">
+    <mat-card class="signup" mat-elevation-z6>
+        <div class="signup-close-button"><shared-buttons-close (click)=goBack()></shared-buttons-close></div>
+        <mat-card-header class="signup-header">
+            <mat-card-title class="signup-header-title">LET'S GET STARTED! </mat-card-title>
+            <mat-card-subtitle class="signup-header-subtitle">ENTER YOUR FIRST AND LAST NAME EXACTLY AS WRITTEN ON YOUR PASSPORT OR ID CARD.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div [formGroup]="signupForm" class="signup-content">
+                <mat-form-field>
+                    <input matInput placeholder="firstname" formControlName="firstname" #firstname>
+                    <mat-hint align="end">
+                        {{firstname.value.length}} / 20
+                    </mat-hint>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="lastname" formControlName="lastname" #lastname>
+                    <mat-hint align="end">
+                        {{lastname.value.length}} / 20
+                    </mat-hint>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="email" formControlName="email" #password>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="password" formControlName="password" #password>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="confirm" formControlName="confirm" #confirm>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+        <mat-card-actions class="signup-button">
+            <button mat-raised-button class="right accent-color" (click)="signUp()">Sign Up</button>
+        </mat-card-actions>
+    </mat-card>
+    <img class="image-container" src="../../../assets/img/suhyeon-choi-tTfDMaRq-FE-unsplash.jpg" alt="">
+</div>

@@ -2,18 +2,18 @@ import express, { Request, Response } from 'express';
 import {
   callerIsAdmin,
   callerIsRootorAdmin,
-  verifyAuthToken,
+  userAuthentication,
   uniqueEmail,
   existingUserId,
   callerIsRoot,
   existingEmail,
   callerIsUserOrAdmin,
-} from '../middlewares/userMiddlewares';
+} from '../middlewares/user.Middlewares';
 import { authenticateInputValidator, userInputValidator } from '../middlewares/userInputsValidator';
-import { getRolesIdFromRolesName, getStatusIdFromStatusName } from '../helpers/userUtilityFunction';
+import { getStatusIdFromStatusName } from '../helpers/userUtilityFunction';
 
 import { User, UserStore } from '../models/users';
-import { createCsrfToken, createSessionToken } from '../helpers/security.utils';
+import { createSessionToken } from '../helpers/security.utils';
 
 const store = new UserStore();
 
@@ -44,27 +44,20 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const userStatusFormated:  number = await getStatusIdFromStatusName('activ') as unknown as number;
-  const userRolesFormated: number = await getRolesIdFromRolesName(req.body.roles) as unknown as number;
-
+  const userStatusFormated:  number = await getStatusIdFromStatusName('client') as unknown as number;
   const user: User = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
     status: userStatusFormated,
-    roles: userRolesFormated,
-    password_digest: req.body.password_digest,
+    password_digest: req.body.password,
   };
+    // console.log(`usersStores -- create -- user : ${JSON.stringify(user)}`)
   try {
     const newUser = await store.create(user);
     // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-    // const token = jwt.sign(
-    //   { user: newUser },
-    //   process.env.TOKEN_SECRET as Secret,
-    //   { expiresIn: '3600' }
-    // );
-    const token = createSessionToken(newUser);
-    // console.log(`usersStores -- create -- token : ${token}`)
+    const token = await createSessionToken(newUser);
+    // console.log(`usersStores -- create -- token : ${JSON.stringify(token)}`)
     res.json(token);
   } catch (error: any) {
     res.status(412).send({
@@ -89,22 +82,14 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const authenticate = async (req: Request, res: Response) => {
-  const user: User = {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    status: req.body.status,
-    roles: req.body.roles,
-    password_digest: req.body.password_digest,
-  };
+  const email = req.body.email;
+  const password = req.body.password;
   try {
-    // console.log(`userStores -- authenticate -- user ${JSON.stringify(user)}`)
-    const authenticateUser = await store.authenticate(user);
-    // const token = jwt.sign(
-    //   { user: authenticateUser },
-    //   process.env.TOKEN_SECRET as Secret
-    // );
+    // console.log(`userStores -- authenticate -- email ${JSON.stringify(email)}`)
+    const authenticateUser = await store.authenticate(email, password);
+    // console.log(`userStores -- authenticate -- authenticateUser ${JSON.stringify(authenticateUser)}`)
     const token = await createSessionToken(authenticateUser);
+    // console.log(`userStores -- authenticate -- token ${JSON.stringify(token)}`)
     res.json(token);
   } catch (error: any) {
     res.status(412).send({
@@ -128,41 +113,20 @@ const indexStatus = async (req: Request, res: Response) => {
   }
 };
 
-const indexRoles = async (req: Request, res: Response) => {
-  try {
-    const result = await store.indexRoles();
-    res.json(result);
-  } catch (error: any) {
-    res.status(412).send({
-      success: false,
-      message: 'Validation failed',
-      data: error.message,
-    });
-  }
-};
 
 const createAdmin = async (req: Request, res: Response) => {
   const adminStatusFormated: number = await getStatusIdFromStatusName('admin') as unknown as number;
   // console.log(`usersStores -- createAdmin -- adminStatusFormated : ${JSON.stringify(adminStatusFormated)}`)
   // console.log(`usersStores -- createAdmin -- req.body.roles : ${JSON.stringify(req.body.roles)}`)
-  const userRolesFormated: number = await getRolesIdFromRolesName(req.body.roles) as unknown as number;
-  // console.log(`usersStores -- createAdmin -- userRolesFormated : ${JSON.stringify(userRolesFormated)}`)
   const user: User = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
     status: adminStatusFormated,
-    roles: userRolesFormated,
     password_digest: req.body.password_digest,
   };
   try {
     const newUser = await store.create(user);
-    // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-    // const token = jwt.sign(
-    //   { user: newUser },
-    //   process.env.TOKEN_SECRET as Secret,
-    //   { expiresIn: '3600' }
-    // );
     const token = await createSessionToken(newUser);
     // console.log(`usersStores -- create -- token : ${token}`)
     res.json(token);
@@ -176,21 +140,21 @@ const createAdmin = async (req: Request, res: Response) => {
 };
 
 const usersRoutes = (app: express.Application) => {
+  // auth path
+  app.post('/signup', userInputValidator, uniqueEmail,  create);
+  app.post('/login', authenticateInputValidator, existingEmail, authenticate);
   // user path
-  app.get('/users/:id', existingUserId, verifyAuthToken, callerIsUserOrAdmin, show);
-  app.post('/users/register', userInputValidator, uniqueEmail,  create);
-  app.delete('/users/:id', verifyAuthToken, callerIsUserOrAdmin,  existingUserId, destroy);
-  app.post('/users/authenticate', authenticateInputValidator, existingEmail, authenticate);
+  app.get('/user/:id', existingUserId, userAuthentication, callerIsUserOrAdmin, show);
+  app.delete('/user/:id', userAuthentication, callerIsUserOrAdmin,  existingUserId, destroy);
   // admin path
   // the first (and only the first administrator account) will be created thanks to the initial root account
-  app.post('/users', verifyAuthToken, callerIsRootorAdmin, callerIsRoot, uniqueEmail, userInputValidator, createAdmin);
-  app.get('/users', verifyAuthToken, callerIsAdmin, index); // retun all users
-  app.get('/status', verifyAuthToken, callerIsAdmin, indexStatus); // return all status
-  app.get('/roles', verifyAuthToken, callerIsAdmin, indexRoles); // return all roles
+  app.post('/user', userAuthentication, callerIsRootorAdmin, callerIsRoot, uniqueEmail, userInputValidator, createAdmin);
+  app.get('/user', userAuthentication, callerIsAdmin, index); // retun all users
+  app.get('/status', userAuthentication, callerIsAdmin, indexStatus); // return all status
 };
 
 /// middleware
-// verifyAuthToken    Check if the user's token is valid
+// userAuthentication    Check if the user's token is valid
 // callerIsXX         Check if the Json Web Token allowing the call is coming from a user of status XX
 // existingUserId     Check if the requested id exists
 // uniqueEmail        Check if the user's email does'nt already exist

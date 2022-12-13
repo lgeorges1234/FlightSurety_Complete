@@ -7,7 +7,17 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "backend:install": "cd FlightCompanies/FlightCompanies_Backend && npm install",
+    "backend:build": "cd FlightCompanies/FlightCompanies_Backend && npm run build",
+    "backend:test": "cd FlightCompanies/FlightCompanies_Backend && npm run jasmine",
+    "backend:deploy": "cd FlightCompanies/FlightCompanies_Backend && npm run deploy",
+    "frontend:install": "cd FlightCompanies/FlightCompanies_Frontend && npm install",
+    "frontend:test": "cd FlightCompanies/FlightCompanies_Frontend && npm run test",
+    "frontend:build": "cd FlightCompanies/FlightCompanies_Frontend && npm run build",
+    "frontend:deploy": "cd FlightCompanies/FlightCompanies_Frontend && npm run deploy",
+    "migrate": "cd FlightCompanies/FlightCompanies_Backend && npm run migrate",
+    "backend": "cd FlightCompanies/FlightCompanies_Backend && npm run watch",
+    "frontend": "cd FlightCompanies/FlightCompanies_Frontend && npm run start"
   },
   "author": "",
   "license": "ISC"

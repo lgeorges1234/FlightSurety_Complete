@@ -1,0 +1,24 @@
+<div class="login-dialog">
+    <div class="login-close-button"><shared-buttons-close (click)="close()"></shared-buttons-close></div>
+    <h2 mat-dialog-title class="login-title">LOG IN</h2>
+    <div [formGroup]="loginForm" class="login-form">
+        <mat-form-field [style.width.px]=200>
+            <input class="login-form-input" matInput placeholder="email" formControlName="email" #email>
+        </mat-form-field>
+        <mat-form-field [style.width.px]=200>
+            <input matInput placeholder="password" formControlName="password" #password>
+        </mat-form-field>
+        <div class="login-checkbox">
+            <mat-checkbox color="primary" formControlName="keepLoggged" #keepLogged>
+                Keep me logged in
+            </mat-checkbox>
+        </div>
+    </div>
+    <mat-dialog-actions class="login-action">
+        <button mat-raised-button class="right accent-color" (click)="signIn()">Sign In</button>
+    </mat-dialog-actions>
+    <div class="login-help">
+        <a>Forgot password ></a>
+        <a>Forgot email address ></a>
+    </div>
+</div>

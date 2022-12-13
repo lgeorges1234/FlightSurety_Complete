@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { User } from 'src/app/shared/model/user';
+import { Observable, tap } from 'rxjs';
+import { UserAuth, UserInfo } from 'src/app/shared/model/user';
 import { AuthService } from 'src/app/core/authentication/auth.service';
+import { RouterExtService } from '../services/router.service';
+import { MatDialog } from '@angular/material/dialog';
+import { openLoginDialog } from '../authentication/login-dialog/login-dialog.component';
+import { UserService } from '../http/user/user.service';
 
 @Component({
   selector: 'app-header',
@@ -15,11 +19,15 @@ export class HeaderComponent implements OnInit {
   isAirline$: Observable<boolean> | undefined;
   isAirlineAdmin$: Observable<boolean> | undefined;
   isAdmin$: Observable<boolean> | undefined;
-  user$: Observable<User> | undefined;
-  
+  user$: Observable<UserAuth> | undefined;
+  userId$: Observable<number> | undefined;
+  userName$: Observable<string> | undefined;
+  currentRoute$: Observable<string> | undefined;
 
-  constructor(private authService:AuthService) {
 
+
+  constructor(private authService:AuthService, private dialog: MatDialog,
+              private routerExtService: RouterExtService, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -30,18 +38,24 @@ export class HeaderComponent implements OnInit {
       this.isAirline$ = this.authService.isAirline$;
       this.isAirlineAdmin$ = this.authService.isAirlineAdmin$;
       this.isAdmin$ = this.authService.isAdmin$;
+      this.currentRoute$ = this.routerExtService.currentURL$;
   }
 
   logout() {
-      this.authService.logout().subscribe();
+      this.authService.logout();
   }
 
-  signup() {
-    // this.authService.signUp().subscribe();
+  login(){
+    openLoginDialog(this.dialog)
+    .subscribe(() => {
+      console.log("User logged in succesfully");
+      this.userService.getUserInfoById(2);
+    });
   }
 
-  signin() {
-    // this.authService.login().subscribe();
+  getUserInfo() {
+    return this.userService.getUserInfoById(2).subscribe();
   }
+
 
 }

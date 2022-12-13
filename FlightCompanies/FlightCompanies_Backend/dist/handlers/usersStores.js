@@ -1,187 +1,265 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const userMiddlewares_1 = require("../middlewares/userMiddlewares");
-const userInputsValidator_1 = require("../middlewares/userInputsValidator");
-const userUtilityFunction_1 = require("../helpers/userUtilityFunction");
-const users_1 = require("../models/users");
-const security_utils_1 = require("../helpers/security.utils");
-const store = new users_1.UserStore();
-const index = async (_req, res) => {
-    try {
-        const result = await store.index();
-        res.json(result);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-const show = async (req, res) => {
-    try {
-        const result = await store.show(req.params.id);
-        res.json(result);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const create = async (req, res) => {
-    const userStatusFormated = await (0, userUtilityFunction_1.getStatusIdFromStatusName)('activ');
-    const userRolesFormated = await (0, userUtilityFunction_1.getRolesIdFromRolesName)(req.body.roles);
-    const user = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        status: userStatusFormated,
-        roles: userRolesFormated,
-        password_digest: req.body.password_digest,
-    };
-    try {
-        const newUser = await store.create(user);
-        // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-        // const token = jwt.sign(
-        //   { user: newUser },
-        //   process.env.TOKEN_SECRET as Secret,
-        //   { expiresIn: '3600' }
-        // );
-        const token = (0, security_utils_1.createSessionToken)(newUser);
-        // console.log(`usersStores -- create -- token : ${token}`)
-        res.json(token);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const destroy = async (req, res) => {
-    try {
-        const result = await store.delete(req.params.id);
-        res.json(result);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const authenticate = async (req, res) => {
-    const user = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        status: req.body.status,
-        roles: req.body.roles,
-        password_digest: req.body.password_digest,
-    };
-    try {
-        // console.log(`userStores -- authenticate -- user ${JSON.stringify(user)}`)
-        const authenticateUser = await store.authenticate(user);
-        // const token = jwt.sign(
-        //   { user: authenticateUser },
-        //   process.env.TOKEN_SECRET as Secret
-        // );
-        const token = await (0, security_utils_1.createSessionToken)(authenticateUser);
-        res.json(token);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const indexStatus = async (req, res) => {
-    try {
-        const result = await store.indexStatus();
-        res.json(result);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const indexRoles = async (req, res) => {
-    try {
-        const result = await store.indexRoles();
-        res.json(result);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const createAdmin = async (req, res) => {
-    const adminStatusFormated = await (0, userUtilityFunction_1.getStatusIdFromStatusName)('admin');
-    // console.log(`usersStores -- createAdmin -- adminStatusFormated : ${JSON.stringify(adminStatusFormated)}`)
-    // console.log(`usersStores -- createAdmin -- req.body.roles : ${JSON.stringify(req.body.roles)}`)
-    const userRolesFormated = await (0, userUtilityFunction_1.getRolesIdFromRolesName)(req.body.roles);
-    // console.log(`usersStores -- createAdmin -- userRolesFormated : ${JSON.stringify(userRolesFormated)}`)
-    const user = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        status: adminStatusFormated,
-        roles: userRolesFormated,
-        password_digest: req.body.password_digest,
-    };
-    try {
-        const newUser = await store.create(user);
-        // console.log(`usersStores -- create -- newUser : ${JSON.stringify(newUser)}`)
-        // const token = jwt.sign(
-        //   { user: newUser },
-        //   process.env.TOKEN_SECRET as Secret,
-        //   { expiresIn: '3600' }
-        // );
-        const token = await (0, security_utils_1.createSessionToken)(newUser);
-        // console.log(`usersStores -- create -- token : ${token}`)
-        res.json(token);
-    }
-    catch (error) {
-        res.status(412).send({
-            success: false,
-            message: 'Validation failed',
-            data: error.message,
-        });
-    }
-};
-const usersRoutes = (app) => {
+exports.__esModule = true;
+var user_Middlewares_1 = require("../middlewares/user.Middlewares");
+var userInputsValidator_1 = require("../middlewares/userInputsValidator");
+var userUtilityFunction_1 = require("../helpers/userUtilityFunction");
+var users_1 = require("../models/users");
+var security_utils_1 = require("../helpers/security.utils");
+var store = new users_1.UserStore();
+var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.index()];
+            case 1:
+                result = _a.sent();
+                res.json(result);
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_1.message
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.show(req.params.id)];
+            case 1:
+                result = _a.sent();
+                res.json(result);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_2.message
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userStatusFormated, user, newUser, token, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, userUtilityFunction_1.getStatusIdFromStatusName)('client')];
+            case 1:
+                userStatusFormated = _a.sent();
+                user = {
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    email: req.body.email,
+                    status: userStatusFormated,
+                    password_digest: req.body.password
+                };
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 5, , 6]);
+                return [4 /*yield*/, store.create(user)];
+            case 3:
+                newUser = _a.sent();
+                return [4 /*yield*/, (0, security_utils_1.createSessionToken)(newUser)];
+            case 4:
+                token = _a.sent();
+                // console.log(`usersStores -- create -- token : ${JSON.stringify(token)}`)
+                res.json(token);
+                return [3 /*break*/, 6];
+            case 5:
+                error_3 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_3.message
+                });
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store["delete"](req.params.id)];
+            case 1:
+                result = _a.sent();
+                res.json(result);
+                return [3 /*break*/, 3];
+            case 2:
+                error_4 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_4.message
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var email, password, authenticateUser, token, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                email = req.body.email;
+                password = req.body.password;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, store.authenticate(email, password)];
+            case 2:
+                authenticateUser = _a.sent();
+                return [4 /*yield*/, (0, security_utils_1.createSessionToken)(authenticateUser)];
+            case 3:
+                token = _a.sent();
+                // console.log(`userStores -- authenticate -- token ${JSON.stringify(token)}`)
+                res.json(token);
+                return [3 /*break*/, 5];
+            case 4:
+                error_5 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_5.message
+                });
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+var indexStatus = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.indexStatus()];
+            case 1:
+                result = _a.sent();
+                res.json(result);
+                return [3 /*break*/, 3];
+            case 2:
+                error_6 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_6.message
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var createAdmin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var adminStatusFormated, user, newUser, token, error_7;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, userUtilityFunction_1.getStatusIdFromStatusName)('admin')];
+            case 1:
+                adminStatusFormated = _a.sent();
+                user = {
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    email: req.body.email,
+                    status: adminStatusFormated,
+                    password_digest: req.body.password_digest
+                };
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 5, , 6]);
+                return [4 /*yield*/, store.create(user)];
+            case 3:
+                newUser = _a.sent();
+                return [4 /*yield*/, (0, security_utils_1.createSessionToken)(newUser)];
+            case 4:
+                token = _a.sent();
+                // console.log(`usersStores -- create -- token : ${token}`)
+                res.json(token);
+                return [3 /*break*/, 6];
+            case 5:
+                error_7 = _a.sent();
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: error_7.message
+                });
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+var usersRoutes = function (app) {
+    // auth path
+    app.post('/signup', userInputsValidator_1.userInputValidator, user_Middlewares_1.uniqueEmail, create);
+    app.post('/login', userInputsValidator_1.authenticateInputValidator, user_Middlewares_1.existingEmail, authenticate);
     // user path
-    app.get('/users/:id', userMiddlewares_1.existingUserId, userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsUserOrAdmin, show);
-    app.post('/users/register', userInputsValidator_1.userInputValidator, userMiddlewares_1.uniqueEmail, create);
-    app.delete('/users/:id', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsUserOrAdmin, userMiddlewares_1.existingUserId, destroy);
-    app.post('/users/authenticate', userInputsValidator_1.authenticateInputValidator, userMiddlewares_1.existingEmail, authenticate);
+    app.get('/user/:id', user_Middlewares_1.existingUserId, user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsUserOrAdmin, show);
+    app["delete"]('/user/:id', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsUserOrAdmin, user_Middlewares_1.existingUserId, destroy);
     // admin path
     // the first (and only the first administrator account) will be created thanks to the initial root account
-    app.post('/users', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsRootorAdmin, userMiddlewares_1.callerIsRoot, userMiddlewares_1.uniqueEmail, userInputsValidator_1.userInputValidator, createAdmin);
-    app.get('/users', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, index); // retun all users
-    app.get('/status', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, indexStatus); // return all status
-    app.get('/roles', userMiddlewares_1.verifyAuthToken, userMiddlewares_1.callerIsAdmin, indexRoles); // return all roles
+    app.post('/user', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsRootorAdmin, user_Middlewares_1.callerIsRoot, user_Middlewares_1.uniqueEmail, userInputsValidator_1.userInputValidator, createAdmin);
+    app.get('/user', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsAdmin, index); // retun all users
+    app.get('/status', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsAdmin, indexStatus); // return all status
 };
 /// middleware
-// verifyAuthToken    Check if the user's token is valid
+// userAuthentication    Check if the user's token is valid
 // callerIsXX         Check if the Json Web Token allowing the call is coming from a user of status XX
 // existingUserId     Check if the requested id exists
 // uniqueEmail        Check if the user's email does'nt already exist
 // existingEmail      Check if the user's email is already registered
 // userInputValidator Check if user's creation inputs respect applied rules
 // authenticateInputValidator Check if user's authentication inputs respect applied rules
-exports.default = usersRoutes;
+exports["default"] = usersRoutes;

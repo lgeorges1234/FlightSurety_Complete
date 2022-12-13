@@ -133,33 +133,63 @@ export const existingEmail = async (
   }
 };
 
-/// check presence and validity of the token's request
-export const verifyAuthToken = (
+// /// check presence and validity of the token's request
+// export const verifyAuthToken = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     // get the token from the request
+//     // console.log(`userVerifier -- verifyAuthToken -- req.headers.authorization : ${JSON.stringify(req.headers.authorization)}`)
+//     const authorizationHeader = req.headers.authorization as string;
+//     const token = authorizationHeader.split(' ')[1];
+//     // console.log(`userVerifier -- verifyAuthToken -- token : ${JSON.stringify(token)}`)
+//     // verify the token using jwt.verify
+//     const user: any = jwt.verify(token, process.env.TOKEN_SECRET as Secret);
+//     console.log(`userVerifier -- verifyAuthToken -- user : ${JSON.stringify(user)}`)
+//     // res.locals.user = user.subject;
+//     req.app.locals.user = user.subject;
+//     next();
+//     // in case of issues concerning the token presence in the request or validity
+//     // send back an error message
+//   } catch (error: any) {
+//     res.status(412).send({
+//       success: false,
+//       message: 'Validation failed',
+//       data: 'token is not valid, access Denied',
+//     });
+//   }
+// };
+
+export const userAuthentication = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    // get the token from the request
-    // console.log(`userVerifier -- verifyAuthToken -- req.headers.authorization : ${JSON.stringify(req.headers.authorization)}`)
+      // get the token from the request
+    // console.log(`userVerifier -- userAuthentication -- req.headers.authorization : ${JSON.stringify(req.headers.authorization)}`)
     const authorizationHeader = req.headers.authorization as string;
     const token = authorizationHeader.split(' ')[1];
     // console.log(`userVerifier -- verifyAuthToken -- token : ${JSON.stringify(token)}`)
-    // verify the token using jwt.verify
-    const user: any = jwt.verify(token, process.env.TOKEN_SECRET as Secret);
-    // console.log(`userVerifier -- verifyAuthToken -- user : ${JSON.stringify(user)}`)
-    res.locals.user = user.user;
-    next();
-    // in case of issues concerning the token presence in the request or validity
-    // send back an error message
-  } catch (error: any) {
-    res.status(412).send({
-      success: false,
-      message: 'Validation failed',
-      data: 'token is not valid, access Denied',
-    });
-  }
+    if (token) {
+      handleSessionCookie(token, req)
+        .then(() => next())
+        .catch((err: any) => {
+          console.error(err);
+          next();
+        })
+    }
 };
+
+async function handleSessionCookie(token: string, req: Request) {
+  try {
+    const user: any = jwt.verify(token, process.env.TOKEN_SECRET as Secret);
+    req.app.locals.user = user;
+  } catch(error: any) {
+    console.log("Error: Could not extract user from request:", error.message);
+  }
+}
 
 export const existingUserId = async (
   req: Request,

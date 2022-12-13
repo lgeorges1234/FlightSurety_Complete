@@ -1,0 +1,24 @@
+<div [formGroup]="parentGroup">
+    <div formGroupName="travelStep">
+        <mat-form-field>
+            <mat-select class="form-component" MatSelect formControlName="departure" placeholder="Departing from ">
+                <mat-option value="">Paris</mat-option>
+                <mat-option value="">NY</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select class="form-component" MatSelect formControlName="arrival" placeholder="Arriving at ">
+                <mat-option value="">Paris</mat-option>
+                <mat-option value="">NY</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input class="form-component" matInput formControlName="travelDates" placeholder="Travel dates" [matDatepicker]="releasedAtPicker" />
+            <mat-datepicker-toggle matSuffix [for]="releasedAtPicker"></mat-datepicker-toggle>
+            <mat-datepicker #releasedAtPicker [dateClass]="dateClass">
+            </mat-datepicker>
+        </mat-form-field>
+    </div>
+</div>
+
+

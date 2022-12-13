@@ -1,0 +1,30 @@
+.step-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.step {
+    width: 70%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.step-button {
+    justify-self: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+::ng-deep .mat-raised-button {
+    min-width: 75px;
+}
+
+
+
+
+

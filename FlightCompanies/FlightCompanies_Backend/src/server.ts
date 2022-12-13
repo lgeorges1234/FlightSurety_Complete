@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import airlinesRoutes from './handlers/airlinesStore';
 import usersRoutes from './handlers/usersStores';
+import { userAuthentication } from './middlewares/user.Middlewares';
 
 const app: express.Application = express();
 const port: number = 8080;
@@ -11,15 +12,17 @@ const port: number = 8080;
 app.use(bodyParser.json());
 app.use(cors({ origin: true, credentials: true }));
 
+app.use(userAuthentication);
+
 app.get('/', (_req: express.Request, res: express.Response) => {
   res.send("Welcome to Airlines's API");
 });
 
-app.listen(8080, () => {
+usersRoutes(app);
+airlinesRoutes(app);
+
+app.listen(port, () => {
   console.log(`server started at localhost:${port}`);
 });
-
-airlinesRoutes(app);
-usersRoutes(app);
 
 export default app;

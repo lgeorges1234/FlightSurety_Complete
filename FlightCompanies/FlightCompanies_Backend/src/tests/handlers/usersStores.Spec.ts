@@ -12,7 +12,6 @@ const {
   ROOT_FIRSTNAME,
   ROOT_LASTNAME,
   ROOT_STATUS,
-  ROOT_ROLES,
   ROOT_PASSWORD,
 } = process.env;
 
@@ -22,7 +21,6 @@ interface userInterface {
   firstname: string;
   lastname: string;
   status: string;
-  roles: string;
   password_digest: string;
 }
 
@@ -53,7 +51,6 @@ describe('usersRoute', () => {
         firstname: ROOT_FIRSTNAME as string,
         lastname: ROOT_LASTNAME as string,
         status: ROOT_STATUS as string,
-        roles: ROOT_ROLES as string,
         password_digest: ROOT_PASSWORD as string,
       };
       rootUserWithFalsyPwd = {
@@ -61,7 +58,6 @@ describe('usersRoute', () => {
         firstname: ROOT_FIRSTNAME as string,
         lastname: ROOT_LASTNAME as string,
         status: ROOT_STATUS as string,
-        roles: ROOT_ROLES as string,
         password_digest: 'byngaJ-rarbov-sijsa6',
       };
       rootUserWithMalformedEmail = {
@@ -69,7 +65,6 @@ describe('usersRoute', () => {
         firstname: ROOT_FIRSTNAME as string,
         lastname: ROOT_LASTNAME as string,
         status: ROOT_STATUS as string,
-        roles: ROOT_ROLES as string,
         password_digest: ROOT_PASSWORD as string,
       };
       adminUser = {
@@ -77,7 +72,6 @@ describe('usersRoute', () => {
           firstname: 'Georges',
           lastname: 'Clooney',
           status: "admin",
-          roles: "operator",
           password_digest: 'byngaJ-rarbov-sijsa6',
       };
       adminUser2 = {
@@ -85,7 +79,6 @@ describe('usersRoute', () => {
         firstname: 'Denzel',
         lastname: 'Washington',
         status: "admin",
-        roles: "operator",
         password_digest: 'byngaJ-sijsa6-rarbov',
       };
       adminUserRoles = {
@@ -93,7 +86,6 @@ describe('usersRoute', () => {
         firstname: 'Daniel',
         lastname: 'Craig',
         status: "admin",
-        roles: "operator",
         password_digest: 'byngaJ-sijsa6-rarbov',
     };
       weakPasswordAdmin = {
@@ -101,7 +93,6 @@ describe('usersRoute', () => {
         firstname: 'Alain',
         lastname: 'Delon',
         status: "admin",
-        roles: "operator",
         password_digest: 'xoBpow-bacmos-dozje',
       };
       activUser = {
@@ -109,7 +100,6 @@ describe('usersRoute', () => {
         firstname: 'Brad',
         lastname: 'Pitt',
         status: "activ",
-        roles: "client",
         password_digest: 'xoBpow-bacmos-dozje0',
       };
       weakPasswordUser = {
@@ -117,7 +107,6 @@ describe('usersRoute', () => {
         firstname: 'Alain',
         lastname: 'Delon',
         status: "activ",
-        roles: "operator",
         password_digest: 'Password',
       };
     });
@@ -138,31 +127,31 @@ describe('usersRoute', () => {
         }
       }
     });
-    describe('AUTHENTICATE /users/authenticate', () => {
+    describe('AUTHENTICATE /login', () => {
       it('should return an error for a non existing user', async () => {
         const authenticateResponse = await request
-          .post('/users/authenticate')
+          .post('/login')
           .send(adminUser);
         expect(authenticateResponse.status).toBe(412);
         expect(authenticateResponse.body.data).toEqual("Email not registered - access denied");
       });
       it('should return an error for an existing user with wrong password', async () => {
         const authenticateResponse = await request
-          .post('/users/authenticate')
+          .post('/login')
           .send(rootUserWithFalsyPwd);
         expect(authenticateResponse.status).toBe(412);
         expect(authenticateResponse.body.data).toEqual("Could not authenticate user. Error: Error: Password of root@root.com is not correct");
       });
       it('should return an error for an malformed input email', async () => {
         const authenticateResponse = await request
-          .post('/users/authenticate')
+          .post('/login')
           .send(rootUserWithMalformedEmail);
         expect(authenticateResponse.status).toBe(412);
         expect(authenticateResponse.body.data.errors.email[0]).toEqual('The email format is invalid.');
       });
       it('should return a token', async () => {
         const authenticateResponse = await request
-          .post('/users/authenticate')
+          .post('/login')
           .send(rootUser);
         rootToken = authenticateResponse.body;
         expect(authenticateResponse.status).toBe(200);
@@ -219,10 +208,10 @@ describe('usersRoute', () => {
     });
 
 
-    describe('CREATE POST /users/register', () => {
+    describe('CREATE POST /signup', () => {
       it('should return an active token', async () => {
         const createResponse = await request
-          .post('/users/register')
+          .post('/signup')
           .send(activUser)
           .set('Accept', 'application/json');
         activToken = createResponse.body;
@@ -237,7 +226,7 @@ describe('usersRoute', () => {
       });
       it('email already registered should return an error', async () => {
         const createResponse = await request
-          .post('/users/register')
+          .post('/signup')
           .send(activUser)
           .set('Accept', 'application/json');
         expect(createResponse.status).toBe(412);
@@ -246,7 +235,7 @@ describe('usersRoute', () => {
       });
       it('user with weak password should return an error', async () => {
         const createResponse = await request
-          .post('/users/register')
+          .post('/signup')
           .send(weakPasswordUser)
           .set('Accept', 'application/json');
         expect(createResponse.status).toBe(412);

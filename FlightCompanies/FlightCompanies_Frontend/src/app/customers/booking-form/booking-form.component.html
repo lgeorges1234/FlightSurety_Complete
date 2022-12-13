@@ -1,0 +1,40 @@
+<div class="booking-form-stepper">
+    <form  [formGroup]="bookingForm" class="booking-form">
+        <mat-horizontal-stepper class="mat-elevation-z5" [linear]="true" labelPosition="end">
+            <mat-step errorMessage="Flight details in error">
+                <ng-template matStepLabel>Flight Details</ng-template>
+                <div class="step-container">
+                    <div class="step"><booking-form-step1 [parentGroup]="bookingForm"></booking-form-step1></div>
+                    <div class="step-button">
+                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step errorMessage="Flight insurance in error">
+                <ng-template matStepLabel>Passenger Details</ng-template>
+                <div class="step-container">
+                    <div class="step"><booking-form-step2 [parentGroup]="bookingForm"></booking-form-step2></div>
+                    <div class="step-button">
+                        <button mat-raised-button matStepperPrevious>Back</button>
+                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step errorMessage="Flight insurance in error">
+                <ng-template matStepLabel>Flight Booking</ng-template>
+                <div class="step-container">
+                    <div class="step">
+                        <mat-checkbox color="primary" formControlName="insuranceTaken">
+                            Would you like to insure your flight ?
+                        </mat-checkbox>
+                    </div>
+                    <div class="step-button proceed">
+                        <button mat-raised-button matStepperPrevious>Back</button>
+                        <button mat-raised-button class="accent-color">Proceed to Booking</button>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </form>
+</div>
+

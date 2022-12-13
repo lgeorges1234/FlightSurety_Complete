@@ -1,7 +1,8 @@
-mat-toolbar{
-    color: midnightblue;
+mat-toolbar {
+    margin:0;
+    padding: 0;
+    background-color: #fff;
 }
-
 .main-nav {
     display: flex;
     align-items: center;
@@ -37,19 +38,36 @@ mat-toolbar{
     justify-content: flex-end;
 }
 
+.main-nav-isLoggedIn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .secondary-nav {
-    background-color: #fff;
+    background-color: var(--background-accent-color);
+    height: 45px;
     // position: relative;
     // top: 0;
     // z-index: 10;
 }
+.nav-flex-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+
+}
 
 .secondary-nav-button {
+    padding-top: 5px;
     font-size: 1.1rem;
     text-transform: uppercase;
-    margin-right: 5px;
-    letter-spacing: -.6px;
     cursor: pointer;
+    border-radius: 0;
+}
+
+.blue-nav {
+    background-color: rgba(25,25,112,1);
 }
 
 .active {

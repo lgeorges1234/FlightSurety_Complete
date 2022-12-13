@@ -16,8 +16,7 @@ export const userInputValidator = async (
     email: 'required|string|email|max:100',
     firstname: 'required|string|max:100',
     lastname: 'required|string|max:100',
-    status: 'required',
-    password_digest: `required|string|min:8|strongPassword:${userStatus}`,
+    password: `required|string|min:8|strongPassword:${userStatus}`,
   };
 
   const validator = await validate(req.body, validationCreationRules, {});
@@ -42,7 +41,7 @@ export const authenticateInputValidator = async (
 ) => {
   const validationAuthenticationRules = {
     email: 'required|string|email|max:100',
-    password_digest: 'required|string',
+    password: 'required|string',
   };
     const validator = await validate(req.body, validationAuthenticationRules, {});
     // console.log(`userInputValidators -- validator -- validation.passes() : ${JSON.stringify(validator.passes())}`)

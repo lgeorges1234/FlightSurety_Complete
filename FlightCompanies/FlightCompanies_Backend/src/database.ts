@@ -21,6 +21,7 @@ console.log(`POSTGRES_HOST: ${POSTGRES_HOST}`);
 console.log(`POSTGRES_HOST_DEV: ${POSTGRES_HOST}`);
 
 if (ENV === 'test') {
+  console.log("database.ts -- env=test");
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB_TEST,
@@ -30,6 +31,7 @@ if (ENV === 'test') {
 }
 
 if (ENV === 'dev') {
+  console.log("database.ts -- env=dev");
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB_DEV,

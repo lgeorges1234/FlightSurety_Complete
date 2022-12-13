@@ -1,16 +1,21 @@
 import jwt, { Secret } from "jsonwebtoken";
 import { User } from "../models/users";
-import * as argon2 from 'argon2';
+import { getStatusNameFromStatusId } from "./userUtilityFunction";
 
-export async function createSessionToken(user: User) {
-    return jwt.sign({
-        roles: user.status
+export async function createSessionToken(user: User): Promise<string> {
+    // console.log(`securityUtils -- createSessionToken -- user : ${JSON.stringify(user)}`)
+    const statusName = await getStatusNameFromStatusId(`${user.status}`);
+    // console.log(`securityUtils -- createSessionToken -- statusName : ${JSON.stringify(statusName)}`)
+    const token = jwt.sign({
+        roles: statusName,
         },
         process.env.TOKEN_SECRET as Secret,{
         expiresIn: 7200,
         subject: user.id?.toString()
         }
-    )
+    );
+    // console.log(`securityUtils -- createSessionToken -- token : ${JSON.stringify(token)}`)
+    return token;
 };
 
 export async function decodeJwt(token: string) {
@@ -19,6 +24,3 @@ export async function decodeJwt(token: string) {
     return payload;
 };
 
-export async function createCsrfToken(sessionToken: string) {
-    return argon2.hash(sessionToken);
-}
