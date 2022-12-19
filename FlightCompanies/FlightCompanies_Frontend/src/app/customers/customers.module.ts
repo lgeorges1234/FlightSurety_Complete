@@ -15,41 +15,43 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { BookingComponent } from './booking/booking.component';
 import { BookingFormComponent } from './booking-form/booking-form.component';
 import { BookingFormStep1Component } from './booking-form-step1/booking-form-step1.component';
 import { BookingFormStep2Component } from './booking-form-step2/booking-form-step2.component'
-
-
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({
-  declarations: [
-    BookingComponent,
-    BookingFormComponent,
-    BookingFormStep1Component,
-    BookingFormStep2Component
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CustomersRoutingModule,
-    MatIconModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-  ],
-  exports: [
-    BookingComponent,
-  ]
+    declarations: [
+        BookingComponent,
+        BookingFormComponent,
+        BookingFormStep1Component,
+        BookingFormStep2Component
+    ],
+    exports: [
+        BookingComponent,
+    ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        CustomersRoutingModule,
+        MatIconModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatAutocompleteModule,
+        SharedModule
+    ]
 })
 export class CustomersModule { }

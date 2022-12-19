@@ -6,7 +6,10 @@
                 <div class="step-container">
                     <div class="step"><booking-form-step1 [parentGroup]="bookingForm"></booking-form-step1></div>
                     <div class="step-button">
-                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                        <!-- <button mat-raised-button matStepperNext color="primary">Next</button> -->
+                        <button mat-button matStepperNext color="primary">
+                            <mat-icon>arrow_forward_ios</mat-icon>
+                        </button>
                     </div>
                 </div>
             </mat-step>
@@ -15,8 +18,14 @@
                 <div class="step-container">
                     <div class="step"><booking-form-step2 [parentGroup]="bookingForm"></booking-form-step2></div>
                     <div class="step-button">
-                        <button mat-raised-button matStepperPrevious>Back</button>
-                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                        <!-- <button mat-raised-button matStepperPrevious>Back</button> -->
+                        <!-- <button mat-raised-button matStepperNext color="primary">Next</button> -->
+                        <button mat-button matStepperPrevious>
+                            <mat-icon>arrow_back_ios</mat-icon>
+                        </button>
+                        <button mat-button matStepperNext color="primary">
+                            <mat-icon>arrow_forward_ios</mat-icon>
+                        </button>
                     </div>
                 </div>
             </mat-step>
@@ -29,7 +38,10 @@
                         </mat-checkbox>
                     </div>
                     <div class="step-button proceed">
-                        <button mat-raised-button matStepperPrevious>Back</button>
+                        <!-- <button mat-raised-button matStepperPrevious>Back</button> -->
+                        <button mat-button matStepperPrevious>
+                            <mat-icon>arrow_back_ios</mat-icon>
+                        </button>
                         <button mat-raised-button class="accent-color">Proceed to Booking</button>
                     </div>
                 </div>

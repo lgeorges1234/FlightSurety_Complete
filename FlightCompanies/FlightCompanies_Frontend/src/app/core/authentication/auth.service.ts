@@ -4,7 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, BehaviorSubject} from "rxjs";
 import { UserAuth } from "../../shared/model/user";
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { url } from '../http/user/user.service'
+import { url } from '../http/user/user.service';
 
 const helper = new JwtHelperService();
 
@@ -65,7 +65,7 @@ export class AuthService {
             shareReplay(),
             tap(console.log),
             tap(token => {
-                console.log(`angular -- signup -- token : ${JSON.stringify(token)}`)
+                // console.log(`angular -- signup -- token : ${JSON.stringify(token)}`)
                 this.storeToken(token);
                 const user = this.getUserAuthInfofromToken();
                 this.subject.next(user);

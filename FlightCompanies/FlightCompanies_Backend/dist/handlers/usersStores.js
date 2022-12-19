@@ -35,12 +35,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 var user_Middlewares_1 = require("../middlewares/user.Middlewares");
 var userInputsValidator_1 = require("../middlewares/userInputsValidator");
 var userUtilityFunction_1 = require("../helpers/userUtilityFunction");
 var users_1 = require("../models/users");
 var security_utils_1 = require("../helpers/security.utils");
+var lodash_1 = __importDefault(require("lodash"));
 var store = new users_1.UserStore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, error_1;
@@ -243,19 +247,19 @@ var createAdmin = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 var usersRoutes = function (app) {
     // auth path
-    app.post('/signup', userInputsValidator_1.userInputValidator, user_Middlewares_1.uniqueEmail, create);
-    app.post('/login', userInputsValidator_1.authenticateInputValidator, user_Middlewares_1.existingEmail, authenticate);
+    app.post('/signup', userInputsValidator_1.userInputValidator, lodash_1["default"].partial(user_Middlewares_1.emailIsRegistered, false), create);
+    app.post('/login', userInputsValidator_1.authenticateInputValidator, lodash_1["default"].partial(user_Middlewares_1.emailIsRegistered, true), authenticate);
     // user path
-    app.get('/user/:id', user_Middlewares_1.existingUserId, user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsUserOrAdmin, show);
-    app["delete"]('/user/:id', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsUserOrAdmin, user_Middlewares_1.existingUserId, destroy);
+    app.get('/user/:id', user_Middlewares_1.callerIsAuthenticated, lodash_1["default"].partial(user_Middlewares_1.callerIsAuthorized, ['client', 'admin']), show);
+    app["delete"]('/user/:id', user_Middlewares_1.callerIsAuthenticated, lodash_1["default"].partial(user_Middlewares_1.callerIsAuthorized, ['client', 'admin']), destroy);
     // admin path
     // the first (and only the first administrator account) will be created thanks to the initial root account
-    app.post('/user', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsRootorAdmin, user_Middlewares_1.callerIsRoot, user_Middlewares_1.uniqueEmail, userInputsValidator_1.userInputValidator, createAdmin);
-    app.get('/user', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsAdmin, index); // retun all users
-    app.get('/status', user_Middlewares_1.userAuthentication, user_Middlewares_1.callerIsAdmin, indexStatus); // return all status
+    app.post('/user', user_Middlewares_1.callerIsAuthenticated, lodash_1["default"].partial(user_Middlewares_1.callerIsAuthorized, ['root', 'admin']), lodash_1["default"].partial(user_Middlewares_1.emailIsRegistered, false), userInputsValidator_1.userInputValidator, createAdmin);
+    app.get('/user', user_Middlewares_1.callerIsAuthenticated, lodash_1["default"].partial(user_Middlewares_1.callerIsAuthorized, ['admin']), index); // retun all users
+    app.get('/status', user_Middlewares_1.callerIsAuthenticated, lodash_1["default"].partial(user_Middlewares_1.callerIsAuthorized, ['admin']), indexStatus); // return all status
 };
 /// middleware
-// userAuthentication    Check if the user's token is valid
+//callerIsAuthenticated    Check if the user's token is valid
 // callerIsXX         Check if the Json Web Token allowing the call is coming from a user of status XX
 // existingUserId     Check if the requested id exists
 // uniqueEmail        Check if the user's email does'nt already exist

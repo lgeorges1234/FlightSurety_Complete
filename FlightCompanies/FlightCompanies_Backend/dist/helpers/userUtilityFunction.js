@@ -35,10 +35,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-exports.getStatusIdFromStatusName = exports.getStatusNameFromStatusId = exports.getUserFromId = exports.getUserFromEmail = void 0;
+exports.getStatusIdFromStatusName = exports.getStatusNameFromStatusId = exports.getUserFromId = exports.getUserFromEmail = exports.noAdminExists = void 0;
+var lodash_1 = __importDefault(require("lodash"));
 var users_1 = require("../models/users");
 var store = new users_1.UserStore();
+var noAdminExists = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var adminStatus, result, admin;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, exports.getStatusIdFromStatusName)('admin')];
+            case 1:
+                adminStatus = _a.sent();
+                return [4 /*yield*/, store.index()];
+            case 2:
+                result = _a.sent();
+                console.log("userFonctions -- noAdminExists -- results : ".concat(JSON.stringify(result)));
+                admin = lodash_1["default"].intersectionBy(result, function (user) { user.status == adminStatus; });
+                console.log("userFonctions -- noAdminExists -- results : ".concat(JSON.stringify(admin)));
+                if (admin.length > 0)
+                    return [2 /*return*/, false];
+                else
+                    return [2 /*return*/, true];
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.noAdminExists = noAdminExists;
 var getUserFromEmail = function (email) { return __awaiter(void 0, void 0, void 0, function () {
     var results, user;
     return __generator(this, function (_a) {

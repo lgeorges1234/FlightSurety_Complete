@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { verifyAuthToken } from '../middlewares/user.Middlewares';
 import { Airline, AirlineStore } from '../models/airlines';
 
 const store = new AirlineStore();
@@ -46,10 +45,10 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const airlinesRoutes = (app: express.Application) => {
-  app.get('/airlines', verifyAuthToken, index);
-  app.get('/airlines/:id', verifyAuthToken, show);
+  app.get('/airlines', index);
+  app.get('/airlines/:id', show);
   app.post('/airlines', create);
-  app.delete('/airlines/:id', verifyAuthToken, destroy);
+  app.delete('/airlines/:id', destroy);
 };
 
 export default airlinesRoutes;

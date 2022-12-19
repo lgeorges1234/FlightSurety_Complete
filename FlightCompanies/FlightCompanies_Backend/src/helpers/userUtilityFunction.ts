@@ -1,6 +1,17 @@
-import { UserStore } from '../models/users';
+import _ from 'lodash';
+import { User, UserStore } from '../models/users';
 
 const store = new UserStore();
+
+export const noAdminExists = async () => {
+  const adminStatus = await getStatusIdFromStatusName('admin');
+  const result = await store.index();
+  console.log(`userFonctions -- noAdminExists -- results : ${JSON.stringify(result)}`)
+  const admin = _.intersectionBy(result, function(user: User) { user.status == adminStatus});
+  console.log(`userFonctions -- noAdminExists -- results : ${JSON.stringify(admin)}`)
+  if(admin.length > 0) return false;
+  else return true;
+}
 
 export const getUserFromEmail = async (email: string) => {
   // console.log(`userFonctions -- getUserFromEmail -- email : ${email}`)

@@ -35,261 +35,79 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-exports.existingUserId = exports.userAuthentication = exports.existingEmail = exports.uniqueEmail = exports.callerIsRootorAdmin = exports.callerIsUserOrAdmin = exports.callerIsAdmin = exports.callerIsRoot = void 0;
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.emailIsRegistered = exports.callerIsAuthorized = exports.callerIsAuthenticated = void 0;
+var _ = require("lodash");
 var userUtilityFunction_1 = require("../helpers/userUtilityFunction");
-var callerIsRoot = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var isRoot;
+var callerIsAuthenticated = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        try {
-            isRoot = 'root' == res.locals.user.status;
-            // console.log(`userVerifier -- callerIsRoot  -- res.locals.userStatus : ${JSON.stringify(res.locals.userStatus)}`)
-            // console.log(`userVerifier -- callerIsRoot -- isRoot: ${JSON.stringify(isRoot)}`)
-            if (isRoot)
-                next();
-            else
-                throw new Error('caller must be root user');
-        }
-        catch (error) {
-            res.status(412).send({
-                success: false,
-                message: 'Validation failed',
-                data: error.message
-            });
-        }
-        return [2 /*return*/];
-    });
-}); };
-exports.callerIsRoot = callerIsRoot;
-var callerIsAdmin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var isAdmin, _a, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                _a = 'admin';
-                return [4 /*yield*/, (0, userUtilityFunction_1.getStatusNameFromStatusId)(res.locals.user.status)];
-            case 1:
-                isAdmin = _a == (_b.sent());
-                if (isAdmin)
-                    next();
-                else
-                    throw new Error('caller must be administrator');
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _b.sent();
-                res.status(412).send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: error_1.message
-                });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.callerIsAdmin = callerIsAdmin;
-var callerIsUserOrAdmin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var isAdmin, _a, isUser, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                _a = 'admin';
-                return [4 /*yield*/, (0, userUtilityFunction_1.getStatusNameFromStatusId)(res.locals.user.status)];
-            case 1:
-                isAdmin = _a == (_b.sent());
-                isUser = +req.params.id == res.locals.user.id;
-                // console.log(`userVerifier -- callerIsUserOrAdmin -- +req.params.id: ${JSON.stringify(+req.params.id)}`)
-                // console.log(`userVerifier -- callerIsUserOrAdmin -- res.locals.id: ${JSON.stringify(res.locals.id)}`)
-                // console.log(`userVerifier -- callerIsUserOrAdmin -- isUser: ${JSON.stringify(isUser)}`)
-                if (isAdmin || isUser)
-                    next();
-                else
-                    throw new Error('caller must be the user or administrator');
-                return [3 /*break*/, 3];
-            case 2:
-                error_2 = _b.sent();
-                res.status(412).send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: error_2.message
-                });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.callerIsUserOrAdmin = callerIsUserOrAdmin;
-var callerIsRootorAdmin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var status_1, isAdmin, isRoot;
-    return __generator(this, function (_a) {
-        try {
-            status_1 = res.locals.user.status;
-            isAdmin = 'admin' == status_1;
-            isRoot = 'root' == status_1;
-            // console.log(`userVerifier -- callerIsRootorAdmin -- isRoot: ${JSON.stringify(isRoot)}`)
-            if (isAdmin || isRoot)
-                next();
-            else
-                throw new Error('caller must be root or administrator');
-        }
-        catch (error) {
-            res.status(412).send({
-                success: false,
-                message: 'Validation failed',
-                data: error.message
-            });
-        }
-        return [2 /*return*/];
-    });
-}); };
-exports.callerIsRootorAdmin = callerIsRootorAdmin;
-var uniqueEmail = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, userUtilityFunction_1.getUserFromEmail)(req.body.email)];
-            case 1:
-                user = _a.sent();
-                // console.log(`userVerifier -- uniqueEmail -- user : ${JSON.stringify(user)}`)
-                if (!user)
-                    next();
-                else
-                    throw new Error('Email already registered');
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                res.status(412).send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: error_3.message
-                });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.uniqueEmail = uniqueEmail;
-var existingEmail = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, userUtilityFunction_1.getUserFromEmail)(req.body.email)];
-            case 1:
-                user = _a.sent();
-                // console.log(`userVerifier -- existingEmail -- user : ${JSON.stringify(user)}`)
-                if (user)
-                    next();
-                else
-                    throw new Error('Email not registered - access denied');
-                return [3 /*break*/, 3];
-            case 2:
-                error_4 = _a.sent();
-                res.status(412).send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: error_4.message
-                });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.existingEmail = existingEmail;
-// /// check presence and validity of the token's request
-// export const verifyAuthToken = (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     // get the token from the request
-//     // console.log(`userVerifier -- verifyAuthToken -- req.headers.authorization : ${JSON.stringify(req.headers.authorization)}`)
-//     const authorizationHeader = req.headers.authorization as string;
-//     const token = authorizationHeader.split(' ')[1];
-//     // console.log(`userVerifier -- verifyAuthToken -- token : ${JSON.stringify(token)}`)
-//     // verify the token using jwt.verify
-//     const user: any = jwt.verify(token, process.env.TOKEN_SECRET as Secret);
-//     console.log(`userVerifier -- verifyAuthToken -- user : ${JSON.stringify(user)}`)
-//     // res.locals.user = user.subject;
-//     req.app.locals.user = user.subject;
-//     next();
-//     // in case of issues concerning the token presence in the request or validity
-//     // send back an error message
-//   } catch (error: any) {
-//     res.status(412).send({
-//       success: false,
-//       message: 'Validation failed',
-//       data: 'token is not valid, access Denied',
-//     });
-//   }
-// };
-var userAuthentication = function (req, res, next) {
-    // get the token from the request
-    // console.log(`userVerifier -- userAuthentication -- req.headers.authorization : ${JSON.stringify(req.headers.authorization)}`)
-    var authorizationHeader = req.headers.authorization;
-    var token = authorizationHeader.split(' ')[1];
-    // console.log(`userVerifier -- verifyAuthToken -- token : ${JSON.stringify(token)}`)
-    if (token) {
-        handleSessionCookie(token, req)
-            .then(function () { return next(); })["catch"](function (err) {
-            console.error(err);
+        if (req.app.locals.user) {
+            console.log("user.Middlewares -- callerIsAuthenticated -- req.app.locals.user : ".concat(JSON.stringify(req.app.locals.user)));
             next();
-        });
-    }
-};
-exports.userAuthentication = userAuthentication;
-function handleSessionCookie(token, req) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user;
-        return __generator(this, function (_a) {
-            try {
-                user = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
-                req.app.locals.user = user;
-            }
-            catch (error) {
-                console.log("Error: Could not extract user from request:", error.message);
-            }
-            return [2 /*return*/];
-        });
+        }
+        else
+            res.status(403);
+        return [2 /*return*/];
     });
-}
-var existingUserId = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, error_5;
+}); };
+exports.callerIsAuthenticated = callerIsAuthenticated;
+var callerIsAuthorized = function (allowedRoles, req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, roles, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                user = req.app.locals.user;
+                roles = _.intersection([user.roles], allowedRoles);
+                if (!(roles.length > 0)) return [3 /*break*/, 5];
+                if (!(_.intersection(user.roles, 'client') && req.body.id != user.id)) return [3 /*break*/, 1];
+                console.log("User Id does not correspond to its token permission");
+                res.sendStatus(403);
+                return [3 /*break*/, 4];
+            case 1:
+                _a = _.intersection(user.roles, 'root');
+                if (!_a) return [3 /*break*/, 3];
+                return [4 /*yield*/, (0, userUtilityFunction_1.noAdminExists)()];
+            case 2:
+                _a = (_b.sent());
+                _b.label = 3;
+            case 3:
+                if (_a) {
+                    console.log("User Id does not correspond to user's token id");
+                    res.sendStatus(403);
+                }
+                else
+                    next();
+                _b.label = 4;
+            case 4: return [3 /*break*/, 6];
+            case 5:
+                console.log("Token's role doesn't grant access to this path");
+                res.sendStatus(403);
+                _b.label = 6;
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+exports.callerIsAuthorized = callerIsAuthorized;
+var emailIsRegistered = function (emailExists, req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, userUtilityFunction_1.getUserFromId)(req.params.id)];
+            case 0: return [4 /*yield*/, (0, userUtilityFunction_1.getUserFromEmail)(req.body.email)];
             case 1:
                 user = _a.sent();
-                // console.log(`userVerifier -- existingUserId -- user : ${JSON.stringify(user)}`)
-                if (user) {
+                // console.log(`userVerifier -- uniqueEmail  -- uniqueEmail -- user : ${JSON.stringify(user)}`)
+                if (user && emailExists || !user && !emailExists)
                     next();
+                else if (!user && emailExists) {
+                    console.log('uniqueEmail middleware - Email is not registered');
+                    res.sendStatus(403);
                 }
                 else {
-                    throw new Error('ID is not valid');
+                    console.log('uniqueEmail middleware - Email is already registered');
+                    res.sendStatus(403);
                 }
-                return [3 /*break*/, 3];
-            case 2:
-                error_5 = _a.sent();
-                res.status(412).send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: error_5.message
-                });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
 }); };
-exports.existingUserId = existingUserId;
+exports.emailIsRegistered = emailIsRegistered;

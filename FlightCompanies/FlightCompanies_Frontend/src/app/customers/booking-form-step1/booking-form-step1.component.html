@@ -1,16 +1,28 @@
 <div [formGroup]="parentGroup">
     <div formGroupName="travelStep">
         <mat-form-field>
-            <mat-select class="form-component" MatSelect formControlName="departure" placeholder="Departing from ">
-                <mat-option value="">Paris</mat-option>
-                <mat-option value="">NY</mat-option>
-            </mat-select>
+            <input type="text" placeholder="Departing from " aria-label="Departure" matInput 
+                [matAutocomplete]="selectAirportDeparture" #searchInput>
+            <mat-autocomplete #selectAirportDeparture="matAutocomplete">
+              <mat-option *ngFor="let airport of airports$ | async " [value]="airport.name">
+                <airport-option [airport]="airport"></airport-option>
+              </mat-option>
+            </mat-autocomplete>
+        
+            <!-- <mat-error *ngFor="let validation of validation_msgs.phoneLabelAutocompleteControl">
+              <div *ngIf="phoneLabelAutocompleteControl.hasError(validation.type)">
+                {{validation.message}}
+              </div>
+            </mat-error> -->
         </mat-form-field>
         <mat-form-field>
-            <mat-select class="form-component" MatSelect formControlName="arrival" placeholder="Arriving at ">
-                <mat-option value="">Paris</mat-option>
-                <mat-option value="">NY</mat-option>
-            </mat-select>
+            <input type="text" placeholder="Arriving at " aria-label="Departure" matInput 
+            [matAutocomplete]="selectAirportArrival" #searchInput>
+            <mat-autocomplete #selectAirportArrival="matAutocomplete">
+                <mat-option *ngFor="let airport of airports$ | async" [value]="airport.name">
+                    <airport-option [airport]="airport"></airport-option>
+                </mat-option>
+            </mat-autocomplete>
         </mat-form-field>
         <mat-form-field>
             <input class="form-component" matInput formControlName="travelDates" placeholder="Travel dates" [matDatepicker]="releasedAtPicker" />

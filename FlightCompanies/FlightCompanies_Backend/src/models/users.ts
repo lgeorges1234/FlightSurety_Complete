@@ -1,8 +1,6 @@
 import bcrypt from 'bcryptjs';
 import client from '../database';
 
-// import { userStatus, userRoles } from '../utils/enum';
-
 const saltRounds = process.env.SALT_ROUNDS;
 const pepper = process.env.BCRYPT_PASSWORD as string;
 
@@ -14,6 +12,12 @@ export type User = {
   status: number;
   password_digest: string;
 };
+
+export type UserInfo = {
+  firstname: string;
+  lastname: string;
+  email: string;
+}
 
 export type UsersStatus = {
   id: number;
@@ -37,12 +41,10 @@ export class UserStore {
     }
   }
 
-  async show(id: string): Promise<User> {
+  async show(id: string): Promise<UserInfo> {
     try {
-      const sql = 'SELECT email, users.id, firstname, lastname, status.status_name as status, password_digest FROM users' +  
-      ' INNER JOIN status ON users.status = status.id'+ 
-      ' WHERE users.id=($1)'+
-      ' ORDER BY users.id';
+      const sql = 'SELECT firstname, lastname, email FROM users' +  
+      ' WHERE users.id=($1)';
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();

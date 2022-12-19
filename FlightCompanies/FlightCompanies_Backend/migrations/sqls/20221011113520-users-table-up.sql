@@ -7,4 +7,4 @@ CREATE TABLE users (
     password_digest VARCHAR(300) NOT NULL
 );
 
-INSERT INTO users("email","firstname", "lastname", "status", "password_digest") VALUES (E'root@root.com', E'root', E'root', 1,'$2a$10$Q39HctalV1K0J6Z8NnejgeT3ZPwdj6AaUuiFaXM1SYKprw.5LHUnW')
+INSERT INTO users("email","firstname", "lastname", "status", "password_digest") VALUES (E'root@root.com', E'root', E'root', 1,'$2a$10$Q39HctalV1K0J6Z8NnejgeT3ZPwdj6AaUuiFaXM1SYKprw.5LHUnW');

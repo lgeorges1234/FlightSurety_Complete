@@ -42,7 +42,6 @@ exports.__esModule = true;
 exports.UserStore = void 0;
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var database_1 = __importDefault(require("../database"));
-// import { userStatus, userRoles } from '../utils/enum';
 var saltRounds = process.env.SALT_ROUNDS;
 var pepper = process.env.BCRYPT_PASSWORD;
 var UserStore = /** @class */ (function () {
@@ -83,10 +82,8 @@ var UserStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'SELECT email, users.id, firstname, lastname, status.status_name as status, password_digest FROM users' +
-                            ' INNER JOIN status ON users.status = status.id' +
-                            ' WHERE users.id=($1)' +
-                            ' ORDER BY users.id';
+                        sql = 'SELECT firstname, lastname, email FROM users' +
+                            ' WHERE users.id=($1)';
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();

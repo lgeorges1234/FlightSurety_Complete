@@ -1,19 +1,11 @@
 import express, { Request, Response } from 'express';
-import {
-  callerIsAdmin,
-  callerIsRootorAdmin,
-  userAuthentication,
-  uniqueEmail,
-  existingUserId,
-  callerIsRoot,
-  existingEmail,
-  callerIsUserOrAdmin,
-} from '../middlewares/user.Middlewares';
+import { callerIsAuthenticated, callerIsAuthorized, emailIsRegistered } from '../middlewares/user.Middlewares';
 import { authenticateInputValidator, userInputValidator } from '../middlewares/userInputsValidator';
 import { getStatusIdFromStatusName } from '../helpers/userUtilityFunction';
 
 import { User, UserStore } from '../models/users';
 import { createSessionToken } from '../helpers/security.utils';
+import _ from 'lodash';
 
 const store = new UserStore();
 
@@ -141,20 +133,20 @@ const createAdmin = async (req: Request, res: Response) => {
 
 const usersRoutes = (app: express.Application) => {
   // auth path
-  app.post('/signup', userInputValidator, uniqueEmail,  create);
-  app.post('/login', authenticateInputValidator, existingEmail, authenticate);
+  app.post('/signup', userInputValidator, _.partial(emailIsRegistered, false),  create);
+  app.post('/login', authenticateInputValidator, _.partial(emailIsRegistered, true), authenticate);
   // user path
-  app.get('/user/:id', existingUserId, userAuthentication, callerIsUserOrAdmin, show);
-  app.delete('/user/:id', userAuthentication, callerIsUserOrAdmin,  existingUserId, destroy);
+  app.get('/user/:id', callerIsAuthenticated, _.partial(callerIsAuthorized, ['client', 'admin']), show);
+  app.delete('/user/:id',callerIsAuthenticated, _.partial(callerIsAuthorized, ['client', 'admin']), destroy);
   // admin path
   // the first (and only the first administrator account) will be created thanks to the initial root account
-  app.post('/user', userAuthentication, callerIsRootorAdmin, callerIsRoot, uniqueEmail, userInputValidator, createAdmin);
-  app.get('/user', userAuthentication, callerIsAdmin, index); // retun all users
-  app.get('/status', userAuthentication, callerIsAdmin, indexStatus); // return all status
+  app.post('/user',callerIsAuthenticated, _.partial(callerIsAuthorized, ['root', 'admin']), _.partial(emailIsRegistered, false),  userInputValidator, createAdmin);
+  app.get('/user',callerIsAuthenticated, _.partial(callerIsAuthorized, ['admin']), index); // retun all users
+  app.get('/status',callerIsAuthenticated, _.partial(callerIsAuthorized, ['admin']), indexStatus); // return all status
 };
 
 /// middleware
-// userAuthentication    Check if the user's token is valid
+//callerIsAuthenticated    Check if the user's token is valid
 // callerIsXX         Check if the Json Web Token allowing the call is coming from a user of status XX
 // existingUserId     Check if the requested id exists
 // uniqueEmail        Check if the user's email does'nt already exist

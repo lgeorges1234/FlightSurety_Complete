@@ -21,13 +21,12 @@
       </h1>
   
       <div class="main-nav-account">
-        <a mat-button [mat-menu-trigger-for]="myAccount" *ngIf="isLoggedIn$ | async">
-          Title
-          {{ (user$ | async)!.id }}
+        <a mat-button [mat-menu-trigger-for]="myAccount" *ngIf="isLoggedIn$ | async " #accountName>
+          {{ (userInfo$ | async)?.firstname }} {{ (userInfo$ | async)?.lastname }}
         </a>
 
         <mat-menu #myAccount class="main-nav-isLoggedIn">
-          <a mat-button routerLink="/myAccount" (click)="getUserInfo()">
+          <a mat-button routerLink="/myAccount">
             <mat-icon>person</mat-icon>
             My Account
           </a>

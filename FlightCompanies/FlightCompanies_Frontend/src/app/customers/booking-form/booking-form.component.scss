@@ -24,7 +24,9 @@
     min-width: 75px;
 }
 
-
+:host ::ng-deep .mat-horizontal-stepper-header-container {   
+    display: none; 
+}
 
 
 

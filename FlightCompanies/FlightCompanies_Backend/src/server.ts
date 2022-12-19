@@ -4,7 +4,9 @@ import cors from 'cors';
 
 import airlinesRoutes from './handlers/airlinesStore';
 import usersRoutes from './handlers/usersStores';
-import { userAuthentication } from './middlewares/user.Middlewares';
+import airportsRoutes from './handlers/airportsStore';
+import { userAuthentication } from './middlewares/authentication.middlewares';
+
 
 const app: express.Application = express();
 const port: number = 8080;
@@ -19,6 +21,7 @@ app.get('/', (_req: express.Request, res: express.Response) => {
 });
 
 usersRoutes(app);
+airportsRoutes(app);
 airlinesRoutes(app);
 
 app.listen(port, () => {
