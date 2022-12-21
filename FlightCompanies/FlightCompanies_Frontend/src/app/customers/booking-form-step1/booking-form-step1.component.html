@@ -1,10 +1,10 @@
 <div [formGroup]="parentGroup">
-    <div formGroupName="travelStep">
-        <mat-form-field>
+    <div formGroupName="travelStep" class="form-step-1">
+        <mat-form-field  [style.width.px]=330>
             <input type="text" placeholder="Departing from " aria-label="Departure" matInput 
-                [matAutocomplete]="selectAirportDeparture" #searchInput>
+                [matAutocomplete]="selectAirportDeparture" #searchDeparture (keyup)="searchAirports(searchDeparture.value)" (click)="searchAirports()">
             <mat-autocomplete #selectAirportDeparture="matAutocomplete">
-              <mat-option *ngFor="let airport of airports$ | async " [value]="airport.name">
+              <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name">
                 <airport-option [airport]="airport"></airport-option>
               </mat-option>
             </mat-autocomplete>
@@ -15,17 +15,17 @@
               </div>
             </mat-error> -->
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field [style.width.px]=330>
             <input type="text" placeholder="Arriving at " aria-label="Departure" matInput 
-            [matAutocomplete]="selectAirportArrival" #searchInput>
+            [matAutocomplete]="selectAirportArrival" #searchArrival [style.width.px]=350 (keyup)="searchAirports(searchArrival.value)" (click)="searchAirports()">
             <mat-autocomplete #selectAirportArrival="matAutocomplete">
-                <mat-option *ngFor="let airport of airports$ | async" [value]="airport.name">
+                <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name">
                     <airport-option [airport]="airport"></airport-option>
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
         <mat-form-field>
-            <input class="form-component" matInput formControlName="travelDates" placeholder="Travel dates" [matDatepicker]="releasedAtPicker" />
+            <input class="form-component" matInput formControlName="travelDates" placeholder="Travel dates" [matDatepicker]="releasedAtPicker"/>
             <mat-datepicker-toggle matSuffix [for]="releasedAtPicker"></mat-datepicker-toggle>
             <mat-datepicker #releasedAtPicker [dateClass]="dateClass">
             </mat-datepicker>

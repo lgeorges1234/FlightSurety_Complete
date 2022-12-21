@@ -2,7 +2,7 @@
 <div [formGroup]="parentGroup">
     <div formGroupName="userStep">
         <mat-form-field>
-            <mat-select class="form-component" MatSelect formControlName="passengers" placeholder="Passengers">
+            <mat-select class="form-component" MatSelect formControlName="passengers" placeholder="Passengers" (click)="editPassenger()">
                 <mat-option value="user" *ngIf="isLoggedIn$">{{ (userInfo$ | async)!.firstname }} {{ (userInfo$ | async)!.lastname }}</mat-option>
             </mat-select>
         </mat-form-field>

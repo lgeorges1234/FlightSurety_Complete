@@ -1,3 +1,8 @@
 ::ng-deep .mat-select-panel.example-long-panel { 
     max-width: 500px;
   }
+
+.form-step-1 {
+  display: flex;
+  gap: 15px;
+}

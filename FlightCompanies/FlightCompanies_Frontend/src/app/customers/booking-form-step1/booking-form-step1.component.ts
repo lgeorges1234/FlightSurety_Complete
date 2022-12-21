@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
-import { Observable, fromEvent, concat} from 'rxjs';
-import { catchError, concatMap, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { map, shareReplay, tap} from 'rxjs/operators';
 import { AirportService } from 'src/app/core/http/airport/airport.service';
 import { Airport } from 'src/app/shared/model/airport';
+import { debug, RxJsLoggingLevel } from 'src/app/shared/utils/debug';
 
 @Component({
   selector: 'booking-form-step1',
@@ -13,9 +14,8 @@ import { Airport } from 'src/app/shared/model/airport';
 })
 export class BookingFormStep1Component implements OnInit, AfterViewInit {
   searchTerm = '';
-  airports$: Observable<Airport[]> | undefined;
-
-  @ViewChild('searchInput', { static: true }) input: ElementRef;
+  airports$: Observable<Airport[]>;
+  airportsSearchList$: Observable<Airport[]>;
 
   @Input()
   parentGroup!: FormGroup;
@@ -31,30 +31,30 @@ export class BookingFormStep1Component implements OnInit, AfterViewInit {
   constructor(private airportService: AirportService) { }
 
   ngOnInit(): void {
-    // this.loadAirports();
+    this.airports$ = this.airportService.getAirports().pipe(
+      debug(RxJsLoggingLevel.DEBUG, "airports init"),
+      shareReplay()
+    ); 
+    this.airportsSearchList$ = this.airports$.pipe(
+      debug(RxJsLoggingLevel.DEBUG, "airportsSearchList init"),
+      shareReplay()
+    ); 
   }
 
   ngAfterViewInit() {
-    const searchAirport$ = fromEvent<any>(this.input.nativeElement, 'keyup')
-    .pipe(
-        map(event => event.target.value),
-        debounceTime(400),
-        // distinctUntilChanged(),
-        concatMap(search => this.loadAirports(search)),
-      );
-
-    const initialAirports$ = this.loadAirports();
-
-    this.airports$ = concat(initialAirports$, searchAirport$);
+    
   }
 
-  loadAirports(search = '') {
-    return this.airports$ = this.airportService.getAirports()
+  searchAirports(search:string = '') {
+    console.log(search)
+
+    this.airportsSearchList$ = this.airports$
       .pipe(
-        map(airports => airports.filter(airport => airport.countryname.toLowerCase().includes(search))),
-    )
+        shareReplay(),
+        map(airports => airports.filter((airport) => airport.countryname.toLowerCase().includes(search))),
+        debug(RxJsLoggingLevel.DEBUG, "airportsSearchList filtered"),
+        )
   }
-
 }
 
 

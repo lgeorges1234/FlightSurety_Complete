@@ -1,23 +1,41 @@
 .step-container {
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
 }
 
 .step {
-    width: 70%;
+    width: 100%;
     min-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-top: 20px;
+}
+
+.proceed-section {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.proceed-button {
+    width: 50%;
+    height: 40px;
+    justify-self: flex-end;
+    display: flex;
 }
 
 .step-button {
     justify-self: center;
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
+}
+
+.hidden {
+    opacity: 0;
+    cursor: default;
 }
 
 ::ng-deep .mat-raised-button {
