@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './core/authentication/auth.service';
+import { AirlineService } from './core/http/airline/airline.service';
 import { AirportService } from './core/http/airport/airport.service';
-import { UserService } from './core/http/user/user.service';
+
 
 @Component({
   selector: 'app-root',
@@ -10,10 +10,13 @@ import { UserService } from './core/http/user/user.service';
 })
 export class AppComponent implements OnInit  {
 
-  constructor(private airportsService: AirportService) {
+  constructor(private airportService: AirportService,
+              private airlineService: AirlineService) {
   }
 
   ngOnInit() {
-    this.airportsService.getAirports();
+    console.log('On init')
+    this.airportService.getAirports();
+    this.airlineService.getAirlines();
   }
 }

@@ -5,6 +5,8 @@ import cors from 'cors';
 import airlinesRoutes from './handlers/airlinesStore';
 import usersRoutes from './handlers/usersStores';
 import airportsRoutes from './handlers/airportsStore';
+import flightsRoutes from './handlers/flightsStore';
+
 import { userAuthentication } from './middlewares/authentication.middlewares';
 
 
@@ -23,6 +25,7 @@ app.get('/', (_req: express.Request, res: express.Response) => {
 usersRoutes(app);
 airportsRoutes(app);
 airlinesRoutes(app);
+flightsRoutes(app);
 
 app.listen(port, () => {
   console.log(`server started at localhost:${port}`);

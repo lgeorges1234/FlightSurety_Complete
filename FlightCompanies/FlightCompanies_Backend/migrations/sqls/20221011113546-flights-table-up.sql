@@ -1,8 +1,9 @@
 CREATE TABLE flights (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(20) NOT NULL,
     date TIME WITH TIME ZONE NOT NULL,
+    departure VARCHAR(20) REFERENCES airports(code),
+    arrival VARCHAR(20) REFERENCES airports(code),
     status bigint REFERENCES flightStatus(id) NOT NULL,
-    airline_id BIGINT NOT NULL,
-    CONSTRAINT fk_airline FOREIGN KEY(airline_id) REFERENCES airlines(id)
+    airline_id BIGINT REFERENCES airlines(id) NOT NULL,
 );

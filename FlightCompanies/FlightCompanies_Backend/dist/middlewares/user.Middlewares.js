@@ -42,7 +42,7 @@ var userUtilityFunction_1 = require("../helpers/userUtilityFunction");
 var callerIsAuthenticated = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         if (req.app.locals.user) {
-            console.log("user.Middlewares -- callerIsAuthenticated -- req.app.locals.user : ".concat(JSON.stringify(req.app.locals.user)));
+            // console.log(`user.Middlewares -- callerIsAuthenticated -- req.app.locals.user : ${JSON.stringify(req.app.locals.user)}`)
             next();
         }
         else

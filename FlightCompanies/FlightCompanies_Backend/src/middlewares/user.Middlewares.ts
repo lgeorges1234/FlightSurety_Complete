@@ -10,7 +10,7 @@ export const callerIsAuthenticated = async (
   next: NextFunction
 ) => {
   if(req.app.locals.user) {
-    console.log(`user.Middlewares -- callerIsAuthenticated -- req.app.locals.user : ${JSON.stringify(req.app.locals.user)}`)
+    // console.log(`user.Middlewares -- callerIsAuthenticated -- req.app.locals.user : ${JSON.stringify(req.app.locals.user)}`)
     next();
   } else res.status(403);
 }

@@ -48,8 +48,10 @@
     </div>
   </mat-toolbar>
 
-  <mat-toolbar class="mat-elevation-z8 secondary-nav" mat-elevation-z8 [ngClass]="(currentRoute$ | async) !='/auth/signup' ? '' : 'blue-nav'">
-    <div class="container nav-flex-container" *ngIf="(currentRoute$ | async) !='/auth/signup'">
+  <mat-toolbar class="mat-elevation-z8 secondary-nav" 
+    mat-elevation-z8 *ngIf="(currentRoute$ | async) !='/auth/signup'"
+    [ngSwitch]="(userAuth$ | async)?.roles">
+    <div class="container nav-flex-container" *ngSwitchCase="'admin'">
       <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
         Book a FLight
       </a>
@@ -63,7 +65,7 @@
         Flight Insurance
       </a>
     </div>
-    <div class="container nav-flex-container" *ngIf="(isAirline$ | async) && (currentRoute$ | async) !='/auth/signup'">
+    <div class="container nav-flex-container" *ngSwitchCase="'airline' || 'airlineAdmin'">
       <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
         Book a FLight
       </a>
@@ -77,6 +79,24 @@
         Flight Insurance
       </a>
     </div>
+    <div class="container nav-flex-container" *ngSwitchDefault>
+      <a class="secondary-nav-button" mat-button routerLink="/" routerLinkActive="active">
+        Book a FLight
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Check-in
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        My Bookings
+      </a>
+      <a class="secondary-nav-button" mat-button>
+        Flight Insurance
+      </a>
+    </div>
+  </mat-toolbar>
+
+  <mat-toolbar class="mat-elevation-z8 secondary-nav" 
+    mat-elevation-z8 *ngIf="(currentRoute$ | async) =='/auth/signup'" [ngClass]="'blue-nav'">
   </mat-toolbar>
 
 

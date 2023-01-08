@@ -7,7 +7,6 @@ import { openLoginDialog } from 'src/app/core/authentication/login-dialog/login-
 import { UserService } from 'src/app/core/http/user/user.service';
 import { UserInfo } from 'src/app/shared/model/user';
 import { debug, RxJsLoggingLevel } from 'src/app/shared/utils/debug';
-import { PassThrough } from 'stream';
 
 @Component({
   selector: 'booking-form-step2',
@@ -17,6 +16,7 @@ import { PassThrough } from 'stream';
 export class BookingFormStep2Component implements OnInit {
   isLoggedIn$: Observable<boolean> | undefined;
   isLoggedOut$: Observable<boolean> | undefined;
+  userId$: Observable<number> | undefined;
   userInfo$: Observable<UserInfo> | undefined;
 
   @Input()
@@ -28,6 +28,7 @@ export class BookingFormStep2Component implements OnInit {
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     this.isLoggedOut$ = this.authService.isLoggedOut$;
+    this.userId$ = this.authService.userId$;
     this.userInfo$ = this.userService.userInfo$;
   }
 

@@ -53,9 +53,8 @@ var noAdminExists = function () { return __awaiter(void 0, void 0, void 0, funct
                 return [4 /*yield*/, store.index()];
             case 2:
                 result = _a.sent();
-                console.log("userFonctions -- noAdminExists -- results : ".concat(JSON.stringify(result)));
                 admin = lodash_1["default"].intersectionBy(result, function (user) { user.status == adminStatus; });
-                console.log("userFonctions -- noAdminExists -- results : ".concat(JSON.stringify(admin)));
+                // console.log(`userFonctions -- noAdminExists -- results : ${JSON.stringify(admin)}`)
                 if (admin.length > 0)
                     return [2 /*return*/, false];
                 else

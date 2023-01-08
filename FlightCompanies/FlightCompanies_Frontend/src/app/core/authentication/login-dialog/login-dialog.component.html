@@ -3,10 +3,10 @@
     <h2 mat-dialog-title class="login-title">LOG IN</h2>
     <div [formGroup]="loginForm" class="login-form">
         <mat-form-field [style.width.px]=200>
-            <input class="login-form-input" matInput placeholder="email" formControlName="email" #email>
+            <input type="email" class="login-form-input" matInput placeholder="email" formControlName="email" #email>
         </mat-form-field>
         <mat-form-field [style.width.px]=200>
-            <input matInput placeholder="password" formControlName="password" #password>
+            <input matInput type="password" placeholder="password" formControlName="password" #password>
         </mat-form-field>
         <div class="login-checkbox">
             <mat-checkbox color="primary" formControlName="keepLoggged" #keepLogged>

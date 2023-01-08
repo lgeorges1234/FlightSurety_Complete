@@ -15,6 +15,8 @@ import { AuthService } from './core/authentication/auth.service';
 import { UserService } from './core/http/user/user.service';
 import { RouterExtService } from './core/services/router.service';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { FlightService } from './core/http/flight/flight.service';
+import { AirportService } from './core/http/airport/airport.service';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -37,6 +39,8 @@ export function tokenGetter() {
   providers: [
     AuthService,
     UserService,
+    AirportService,
+    FlightService,
     RouterExtService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -44,6 +44,7 @@ const destroy = async (req: Request, res: Response) => {
   }
 };
 
+
 const airlinesRoutes = (app: express.Application) => {
   app.get('/airlines', index);
   app.get('/airlines/:id', show);

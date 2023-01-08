@@ -36,16 +36,13 @@
                         <mat-checkbox color="primary" formControlName="insuranceTaken">
                             Would you like to insure your flight ?
                         </mat-checkbox>
-                        <div class="proceed-button">
-                            <button mat-raised-button class="accent-color ">Proceed to Booking</button>
-                        </div>
                     </div>
                     <div class="step-button">
                         <button mat-button matStepperPrevious color="primary">
                             <mat-icon>arrow_back_ios</mat-icon>
                         </button>
-                        <button mat-button matStepperNext color="primary" class="hidden">
-                            <mat-icon>arrow_forward_ios</mat-icon>
+                        <button mat-raised-button class="accent-color proceed-button" type="submit" (click)="proceedToBooking()">
+                            Proceed to Booking
                         </button>
                     </div>
                 </div>

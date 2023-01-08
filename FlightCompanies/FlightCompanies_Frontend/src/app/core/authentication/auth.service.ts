@@ -52,7 +52,6 @@ export class AuthService {
                 shareReplay(),
                 tap(console.log),
                 tap(token => {
-                    // console.log(`angular -- signup -- token : ${JSON.stringify(token)}`)
                     this.storeToken(token);
                     const user = this.getUserAuthInfofromToken();
                     this.subject.next(user);

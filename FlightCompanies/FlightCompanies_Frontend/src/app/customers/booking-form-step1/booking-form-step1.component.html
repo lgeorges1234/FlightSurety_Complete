@@ -2,9 +2,12 @@
     <div formGroupName="travelStep" class="form-step-1">
         <mat-form-field  [style.width.px]=330>
             <input type="text" placeholder="Departing from " aria-label="Departure" matInput 
-                [matAutocomplete]="selectAirportDeparture" #searchDeparture (keyup)="searchAirports(searchDeparture.value)" (click)="searchAirports()">
+                [matAutocomplete]="selectAirportDeparture" #searchDeparture 
+                (keyup)="searchAirports(searchDeparture.value)" (click)="searchAirports()"
+                formControlName="departure" required>
             <mat-autocomplete #selectAirportDeparture="matAutocomplete">
-              <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name">
+              <!-- <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name"> -->
+                <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.code">
                 <airport-option [airport]="airport"></airport-option>
               </mat-option>
             </mat-autocomplete>
@@ -17,9 +20,12 @@
         </mat-form-field>
         <mat-form-field [style.width.px]=330>
             <input type="text" placeholder="Arriving at " aria-label="Departure" matInput 
-            [matAutocomplete]="selectAirportArrival" #searchArrival [style.width.px]=350 (keyup)="searchAirports(searchArrival.value)" (click)="searchAirports()">
+            [matAutocomplete]="selectAirportArrival" #searchArrival [style.width.px]=350 
+            (keyup)="searchAirports(searchArrival.value)" (click)="searchAirports()"
+            formControlName="arrival" required>
             <mat-autocomplete #selectAirportArrival="matAutocomplete">
-                <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name">
+                <!-- <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.countryname + ' - ' + airport.name"> -->
+                  <mat-option *ngFor="let airport of airportsSearchList$ | async" [value]="airport.code">
                     <airport-option [airport]="airport"></airport-option>
                 </mat-option>
             </mat-autocomplete>

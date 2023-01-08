@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+      this.userAuth$ = this.authService.user$;
       this.isLoggedIn$ = this.authService.isLoggedIn$;
       this.isLoggedOut$ = this.authService.isLoggedOut$;
       this.isClient$ = this.authService.isClient$;
