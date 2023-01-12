@@ -7,8 +7,13 @@ const index = async (_req: Request, res: Response) => {
   try {
     const result = await store.index();
     res.json(result);
-  } catch (error) {
-    res.status(401).json(`${error}`);
+  } catch (error: any) {
+    res.status(412).send({
+      success: false,
+      message: 'Validation failed',
+      // data: error.message,
+    });
+    console.log(`flightStore -- index -- ${error}`);
   }
 };
 
@@ -16,26 +21,37 @@ const show = async (req: Request, res: Response) => {
   try {
     const result = await store.show(req.params.id);
     res.json(result);
-  } catch (error) {
-    res.status(401).json(`${error}`);
+  } catch (error: any) {
+    res.status(412).send({
+      success: false,
+      message: 'Validation failed',
+      // data: error.message,
+    });
+    console.log(`flightStore -- show -- ${error}`);
   }
 };
 
 const create = async (req: Request, res: Response) => {
   const flight: Flight = {
     name: req.body.name,
-    date: req.body.date,
+    date: req.body.date as unknown as Date,
     departure: req.body.departure,
     arrival: req.body.arrival,
     status: 0,
     airline_id: req.body.airline_id,
   };
-  console.log(`flightStore -- create -- flight : ${JSON.stringify(flight)}`)
+  // console.log(`flightStore -- create -- flight : ${JSON.stringify(flight)}`)
   try {
     const result = await store.create(flight);
+    // console.log(`flightStore -- create -- result : ${JSON.stringify(result)}`)
     res.json(result);
-  } catch (error) {
-    res.status(400).json(`${error}${flight}`);
+  } catch (error: any) {
+    res.status(412).send({
+      success: false,
+      message: 'Validation failed',
+      // data: error.message,
+    });
+    console.log(`flightStore -- create -- ${error}`);
   }
 };
 
@@ -43,9 +59,12 @@ const destroy = async (req: Request, res: Response) => {
   try {
     const result = await store.delete(req.params.id);
     res.json(result);
-  } catch (error) {
-    res.status(401);
-    res.json(error);
+  } catch (error: any) {
+    res.status(412).send({
+      success: false,
+      message: 'Validation failed',
+      // data: error.message,
+    });
   }
 };
 
@@ -57,9 +76,13 @@ const addPassenger = async (req: Request, res: Response) => {
     try {
       const addPassengerResult = await store.addPassenger(flightPassenger);
       res.json(addPassengerResult);
-    } catch (error) {
-      res.status(400);
-      res.json(error);
+    } catch (error: any) {
+      res.status(412).send({
+        success: false,
+        message: 'Validation failed',
+        // data: error.message,
+      });
+      console.log(`flightStore -- addPassenger -- ${error}`);
     }
   };
   
@@ -68,9 +91,13 @@ const addPassenger = async (req: Request, res: Response) => {
     try {
       const editPassengerResult = await store.indexPassengersFromFlight(flight_id);
       res.json(editPassengerResult);
-    } catch (error) {
-      res.status(400);
-      res.json(error);
+    } catch (error: any) {
+        res.status(412).send({
+          success: false,
+          message: 'Validation failed',
+          // data: error.message,
+        });
+      console.log(`flightStore -- indexPassengerFromFlight -- ${error}`);
     }
   };
   
@@ -82,9 +109,13 @@ const addPassenger = async (req: Request, res: Response) => {
     try {
       const removedPassengerResult = await store.removePassenger(flightPassengers);
       res.json(removedPassengerResult);
-    } catch (error) {
-      res.status(400);
-      res.json(error);
+    } catch (error: any) {
+        res.status(412).send({
+          success: false,
+          message: 'Validation failed',
+          // data: error.message,
+        });
+      console.log(`flightStore -- removePassenger -- ${error}`);
     }
   };
 

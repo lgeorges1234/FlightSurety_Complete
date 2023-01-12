@@ -51,7 +51,11 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                res.status(401).json("".concat(error_1));
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- index -- ".concat(error_1));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -70,7 +74,11 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
-                res.status(401).json("".concat(error_2));
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- show -- ".concat(error_2));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -89,18 +97,22 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     status: 0,
                     airline_id: req.body.airline_id
                 };
-                console.log("flightStore -- create -- flight : ".concat(JSON.stringify(flight)));
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, store.create(flight)];
             case 2:
                 result = _a.sent();
+                // console.log(`flightStore -- create -- result : ${JSON.stringify(result)}`)
                 res.json(result);
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                res.status(400).json("".concat(error_3).concat(flight));
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- create -- ".concat(error_3));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -119,8 +131,10 @@ var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 return [3 /*break*/, 3];
             case 2:
                 error_4 = _a.sent();
-                res.status(401);
-                res.json(error_4);
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -145,8 +159,11 @@ var addPassenger = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [3 /*break*/, 4];
             case 3:
                 error_5 = _a.sent();
-                res.status(400);
-                res.json(error_5);
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- addPassenger -- ".concat(error_5));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -168,8 +185,11 @@ var indexPassengersFromFlight = function (req, res) { return __awaiter(void 0, v
                 return [3 /*break*/, 4];
             case 3:
                 error_6 = _a.sent();
-                res.status(400);
-                res.json(error_6);
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- indexPassengerFromFlight -- ".concat(error_6));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -194,8 +214,11 @@ var removePassenger = function (req, res) { return __awaiter(void 0, void 0, voi
                 return [3 /*break*/, 4];
             case 3:
                 error_7 = _a.sent();
-                res.status(400);
-                res.json(error_7);
+                res.status(412).send({
+                    success: false,
+                    message: 'Validation failed'
+                });
+                console.log("flightStore -- removePassenger -- ".concat(error_7));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

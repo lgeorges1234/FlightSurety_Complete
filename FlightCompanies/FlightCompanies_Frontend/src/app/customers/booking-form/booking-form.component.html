@@ -1,6 +1,7 @@
 <div class="booking-form-stepper">
     <form  [formGroup]="bookingForm" class="booking-form">
-        <mat-horizontal-stepper class="mat-elevation-z5" [linear]="true" labelPosition="end">
+        <mat-horizontal-stepper class="mat-elevation-z5" [linear]="true" labelPosition="bottom">
+            
             <mat-step errorMessage="Flight details in error">
                 <ng-template matStepLabel>Flight Details</ng-template>
                 <div class="step-container">
@@ -15,7 +16,7 @@
                     </div>
                 </div>
             </mat-step>
-            <mat-step errorMessage="Flight insurance in error">
+            <mat-step errorMessage="Flight insurance in error" #userStep>
                 <ng-template matStepLabel>Passenger Details</ng-template>
                 <div class="step-container">
                     <div class="step"><booking-form-step2 [parentGroup]="bookingForm"></booking-form-step2></div>

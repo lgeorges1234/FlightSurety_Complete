@@ -9,7 +9,7 @@ import { url } from '../user/user.service';
   providedIn: 'root'
 })
 export class AirlineService {
-  private _airlineUrl = url;
+  private _airlineUrl = `${url}/airlines`;
 
   private subject = new BehaviorSubject([]);
 
@@ -20,13 +20,13 @@ export class AirlineService {
 
   getAirlines() {
     console.log("getAirlines()");
-    const http$ = this.http.get<Airline[]>(`${this._airlineUrl}/airlines`)
+    const http$ = this.http.get<Airline[]>(this._airlineUrl)
       .pipe(
         debug(RxJsLoggingLevel.INFO, "airline service init"),
       );
 
     http$.pipe(
-      tap(() => console.log("HTTP Airline request executed")),
+      tap(() => console.log("HTTP Airlines request executed")),
     )
     .subscribe(
       airlines => this.subject.next(airlines)

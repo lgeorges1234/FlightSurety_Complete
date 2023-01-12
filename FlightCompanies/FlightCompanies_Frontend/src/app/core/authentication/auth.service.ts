@@ -39,8 +39,8 @@ export class AuthService {
     constructor(private http: HttpClient) {
     }
 
-    signUp(firstname: string, lastname: string, email:string, password:string ) {
-        let httpHeaders = new HttpHeaders({
+    signUp(firstname: string, lastname: string, email:string, password:string) {
+        const httpHeaders = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache'
           });

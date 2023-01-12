@@ -62,7 +62,7 @@ var FlightStore = /** @class */ (function () {
                         return [2 /*return*/, indexResult.rows];
                     case 3:
                         error_1 = _a.sent();
-                        throw new Error("Could not get flights. Error: ".concat(error_1));
+                        throw new Error("Could not get flights. ".concat(error_1));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -86,7 +86,7 @@ var FlightStore = /** @class */ (function () {
                         return [2 /*return*/, showResult.rows[0]];
                     case 3:
                         error_2 = _a.sent();
-                        throw new Error("Could not get flight ".concat(id, ". Error: ").concat(error_2));
+                        throw new Error("Could not get flight ".concat(id, ". ").concat(error_2));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -99,7 +99,7 @@ var FlightStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'INSERT INTO flights (name, date, departure, arrival, status, airline_id) VALUES($1, $2) RETURNING *';
+                        sql = 'INSERT INTO flights (name, date, departure, arrival, status, airline_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
@@ -110,7 +110,7 @@ var FlightStore = /** @class */ (function () {
                         return [2 /*return*/, createResult.rows[0]];
                     case 3:
                         error_3 = _a.sent();
-                        throw new Error("Could not add new flight. Error: ".concat(error_3));
+                        throw new Error("Could not add new flight. ".concat(error_3));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -134,7 +134,7 @@ var FlightStore = /** @class */ (function () {
                         return [2 /*return*/, deleteResult.rows[0]];
                     case 3:
                         error_4 = _a.sent();
-                        throw new Error("Could not delete flight ".concat(id, ". Error: ").concat(error_4));
+                        throw new Error("Could not delete flight ".concat(id, ". ").concat(error_4));
                     case 4: return [2 /*return*/];
                 }
             });

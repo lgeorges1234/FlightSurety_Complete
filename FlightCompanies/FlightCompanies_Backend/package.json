@@ -11,10 +11,10 @@
     "clean": "rm -rf dist/ || true",
     "build": "npx tsc",
     "start": "node ./dist/server.js",
-    "migrate": "set ENV=dev && db-migrate --env dev down -c 10 && db-migrate --env dev up ",
+    "migrate": "set ENV=dev && db-migrate --env dev down -c 15 && db-migrate --env dev up ",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "jasmine": "ENV=test && db-migrate --env test down -c 10 && db-migrate --env test up && jasmine-ts && db-migrate db:drop test && db-migrate --env test down -c 10",
-    "jasmine-windows": "set ENV=test&& db-migrate --env test down -c 410 && db-migrate --env test up && jasmine-ts && db-migrate db:drop test && db-migrate --env test down -c 10",
+    "jasmine-windows": "set ENV=test&& db-migrate --env test down -c 15 && db-migrate --env test up && jasmine-ts && db-migrate db:drop test && db-migrate --env test down -c 10",
     "test": "npm run build && npm run jasmine",
     "test-windows": "npm run build && npm run jasmine-windows",
     "deploy": "chmod +x ./bin/deploy.sh && ./bin/deploy.sh"

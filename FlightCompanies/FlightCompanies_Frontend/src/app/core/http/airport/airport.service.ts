@@ -11,7 +11,7 @@ import { url } from '../user/user.service';
 })
 export class AirportService {
 
-  private _airportUrl = url;
+  private _airportUrl = `${url}/airports`;
 
   private subject = new BehaviorSubject([]);
   airports$: Observable<Airport[]> = this.subject.asObservable();
@@ -22,7 +22,7 @@ export class AirportService {
 
   getAirports() {
     console.log("getAirports()")
-    const http$ =  this.http.get<Airport[]>(`${this._airportUrl}/airports`)
+    const http$ =  this.http.get<Airport[]>(this._airportUrl)
     .pipe(
       debug(RxJsLoggingLevel.DEBUG, "airport service init"),
     );

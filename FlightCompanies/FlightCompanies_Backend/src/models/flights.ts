@@ -31,33 +31,34 @@ export class FlightStore {
             conn.release();
             return indexResult.rows;
         } catch (error) {
-            throw new Error(`Could not get flights. Error: ${error}`);
+            throw new Error(`Could not get flights. ${error}`);
         }
         }
 
     async show(id: string): Promise<Flight> {
-    try {
-        const sql = 'SELECT * FROM flights WHERE id=($1)';
-        const conn = await client.connect();
-        const showResult = await conn.query(sql, [id]);
-        conn.release();
-        return showResult.rows[0];
-    } catch (error) {
-        throw new Error(`Could not get flight ${id}. Error: ${error}`);
-    }
+        try {
+            const sql = 'SELECT * FROM flights WHERE id=($1)';
+            const conn = await client.connect();
+            const showResult = await conn.query(sql, [id]);
+            conn.release();
+            return showResult.rows[0];
+        } catch (error) {
+            throw new Error(`Could not get flight ${id}. ${error}`);
+        }
     }
 
     async create(flight: Flight): Promise<Flight> {
-    try {
-        const sql =
-        'INSERT INTO flights (name, date, departure, arrival, status, airline_id) VALUES($1, $2) RETURNING *';
-        const conn = await client.connect();
-        const createResult = await conn.query(sql, [flight.name, flight.date, flight.departure, flight.arrival, flight.status, flight.airline_id]);
-        conn.release();
-        return createResult.rows[0];
-    } catch (error) {
-        throw new Error(`Could not add new flight. Error: ${error}`);
-    }
+        // console.log(`flight -- create -- flight : ${JSON.stringify(flight)}`)
+        try {
+            const sql =
+            'INSERT INTO flights (name, date, departure, arrival, status, airline_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+            const conn = await client.connect();
+            const createResult = await conn.query(sql, [flight.name, flight.date, flight.departure, flight.arrival, flight.status, flight.airline_id]);
+            conn.release();
+            return createResult.rows[0];
+        } catch (error) {
+            throw new Error(`Could not add new flight. ${error}`);
+        }
     }
 
     async delete(id: string): Promise<Flight> {
@@ -68,7 +69,7 @@ export class FlightStore {
         conn.release();
         return deleteResult.rows[0];
     } catch (error) {
-        throw new Error(`Could not delete flight ${id}. Error: ${error}`);
+        throw new Error(`Could not delete flight ${id}. ${error}`);
     }
     }
 

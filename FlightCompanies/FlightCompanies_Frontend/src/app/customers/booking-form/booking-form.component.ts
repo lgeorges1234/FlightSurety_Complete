@@ -18,6 +18,7 @@ export class BookingFormComponent implements OnInit {
   airline_id: Observable<number[]>;
   bookingForm!: FormGroup;
 
+
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     const date = cellDate.getDate();
     if(view == 'month') {
@@ -26,8 +27,8 @@ export class BookingFormComponent implements OnInit {
     return "";
 }
 
-  constructor(private airlineService: AirlineService,
-              private flightService: FlightService) { }
+  constructor(private fb: FormBuilder, private airlineService: AirlineService,
+              private flightService: FlightService ) { }
 
   ngOnInit(): void {
     this.airlineService.getAirline_Id()
@@ -44,7 +45,7 @@ export class BookingFormComponent implements OnInit {
       travelStep: new FormGroup({
         departure: new FormControl('', Validators.required),
         arrival: new FormControl('', Validators.required),
-        travelDates: new FormControl('', Validators.required),
+        travelDates: new FormControl(new Date(), Validators.required),
       }),
       userStep: new FormGroup({
         passengers: new FormControl('', Validators.required),
@@ -57,5 +58,7 @@ export class BookingFormComponent implements OnInit {
     const val = this.bookingForm.value;
     const airlineId = this.airline_id as unknown as number[];
     this.flightService.createFlight("A508", val.travelStep.travelDates, val.travelStep.departure, val.travelStep.arrival, airlineId[0])
+      .subscribe(console.log);
+
   }
 }

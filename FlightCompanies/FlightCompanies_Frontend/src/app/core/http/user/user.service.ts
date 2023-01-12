@@ -16,7 +16,7 @@ const ANONYMOUS_INFO_USER: UserInfo = {
 
 @Injectable()
 export class UserService {
-    private _userUrl = url;
+    private _userUrl = `${url}/user`;
 
     private subject = new BehaviorSubject<UserInfo>(ANONYMOUS_INFO_USER);
 
@@ -33,7 +33,7 @@ export class UserService {
     getUserInfoById(id: number) {
         console.log(`UserId : ${id}`)
         console.log(`Url : ${this._userUrl}`)
-        return this.http.get(`${this._userUrl}/user/${id}`).pipe(
+        return this.http.get(`${this._userUrl}/${id}`).pipe(
                 shareReplay(),
                 tap(() => console.log("user info request completed")),
                 tap(user => this.subject.next(user as unknown as UserInfo)),
